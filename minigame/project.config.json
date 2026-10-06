@@ -1,0 +1,14 @@
+{
+  "description": "奶娃快跑小游戏工程配置",
+  "setting": {
+    "urlCheck": false,
+    "es6": true,
+    "enhance": true,
+    "postcss": true,
+    "minified": true
+  },
+  "compileType": "minigame",
+  "libVersion": "3.0.0",
+  "appid": "touristappid",
+  "projectname": "naiwa-runner"
+}

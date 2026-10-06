@@ -1,6 +1,15 @@
+# Dependencies
 node_modules/
-dist/
-dist-minigame/
-.DS_Store
+
+# Logs
 *.log
+
+# Temp & Cache
+tmp_*/
+.DS_Store
+Thumbs.db
+
+# Editor & Tooling
+.vscode/
+.idea/
 .claude/

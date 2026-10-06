@@ -1,0 +1,1119 @@
+/* 奶娃快跑 - 3D 埃及·砂岩集市 现代全景与对标 HUD 样式 */
+:root {
+    --primary: #FFCC00;
+    --accent: #FF4757;
+    --cyan-teal: #00cec9;
+    --dark-bg: #0d131a;
+    --card-cream: #fbf5e6;
+    --card-text: #2c3e50;
+    --hud-glass: rgba(22, 33, 44, 0.72);
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    user-select: none;
+    -webkit-user-select: none;
+    -webkit-touch-callout: none;
+}
+
+body, html {
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    background-color: var(--dark-bg);
+    font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    color: #FFFFFF;
+}
+
+/* 动感背景光晕 */
+.bg-ambient {
+    position: fixed;
+    inset: 0;
+    background: radial-gradient(circle at 50% 20%, #2980b9 0%, #1a365d 45%, #0b1320 100%);
+    z-index: 0;
+    pointer-events: none;
+}
+
+/* 主游戏容器 */
+.game-wrapper {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 10;
+}
+
+.canvas-container {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    max-width: 100%;
+    max-height: 100%;
+    background: #000;
+    overflow: hidden;
+    touch-action: none;
+    box-sizing: border-box;
+}
+
+@media (min-width: 540px) {
+    .canvas-container {
+        max-width: 460px;
+        max-height: 920px;
+        border-radius: 24px;
+        box-shadow: 0 25px 60px rgba(0, 0, 0, 0.8), 0 0 40px rgba(0, 206, 201, 0.25);
+    }
+}
+
+canvas#gameCanvas {
+    width: 100%;
+    height: 100%;
+    display: block;
+}
+
+/* ================= 顶部 HUD 界面 (对标图 1:1) ================= */
+.hud-top {
+    position: absolute;
+    top: 18px;
+    left: 16px;
+    right: 16px;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    pointer-events: none;
+    z-index: 30;
+}
+
+.hud-left {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    pointer-events: auto;
+}
+
+/* 圆形青色暂停键 */
+.btn-pause {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    background: rgba(0, 184, 212, 0.28);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    border: 2.5px solid #00e5ff;
+    color: #ffffff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    box-shadow: 0 4px 14px rgba(0, 229, 255, 0.35);
+    transition: transform 0.1s ease;
+}
+
+.btn-pause:active {
+    transform: scale(0.9);
+}
+
+/* 埃及关卡倒计时卡片 */
+.stage-card {
+    background: #fbf5e6;
+    color: #2c3e50;
+    padding: 7px 14px 8px;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    min-width: 95px;
+}
+
+.stage-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    font-size: 15px;
+    font-weight: 800;
+}
+
+.stage-name {
+    color: #2c3e50;
+}
+
+.stage-timer {
+    font-size: 12px;
+    color: #7f8c8d;
+    font-weight: 600;
+}
+
+.stage-sub {
+    font-size: 11px;
+    color: #95a5a6;
+    margin-top: 1px;
+}
+
+.stage-progress-bg {
+    width: 100%;
+    height: 4px;
+    background: #e0d7c3;
+    border-radius: 4px;
+    margin-top: 5px;
+    overflow: hidden;
+}
+
+.stage-progress-fill {
+    width: 65%;
+    height: 100%;
+    background: #2ecc71;
+    border-radius: 4px;
+    transition: width 0.3s ease;
+}
+
+/* 右上：倍率 + 计米里程表 + 金币统计 */
+.hud-right {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 8px;
+    pointer-events: auto;
+}
+
+.score-pill {
+    background: #fbf5e6;
+    padding: 6px 14px;
+    border-radius: 20px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.multiplier-tag {
+    color: #27ae60;
+    font-size: 18px;
+    font-weight: 900;
+}
+
+.score-text {
+    color: #2c3e50;
+    font-size: 19px;
+    font-weight: 900;
+    letter-spacing: 0.5px;
+}
+
+.coin-pill {
+    background: #fbf5e6;
+    padding: 5px 14px;
+    border-radius: 20px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.coin-star {
+    font-size: 15px;
+    color: #f1c40f;
+}
+
+.coin-text {
+    color: #2c3e50;
+    font-size: 17px;
+    font-weight: 900;
+}
+
+/* ================= 左下：速度与屋顶冲刺仪表卡片 ================= */
+.hud-speed-card {
+    position: absolute;
+    bottom: 96px;
+    left: 18px;
+    background: rgba(18, 28, 38, 0.78);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    padding: 8px 14px;
+    border-radius: 12px;
+    z-index: 30;
+    pointer-events: none;
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.35);
+}
+
+.speed-row {
+    display: flex;
+    align-items: baseline;
+    gap: 4px;
+}
+
+.speed-val {
+    font-size: 26px;
+    font-weight: 900;
+    color: #ffffff;
+    line-height: 1;
+}
+
+.speed-unit {
+    font-size: 13px;
+    color: #bdc3c7;
+    font-weight: 700;
+}
+
+.speed-status-tag {
+    font-size: 12px;
+    font-weight: 800;
+    color: #2ecc71;
+    margin-top: 4px;
+    letter-spacing: 0.5px;
+}
+
+/* ================= 底部四向青色虚拟触控按键 ================= */
+.touch-controls {
+    position: absolute;
+    bottom: 22px;
+    left: 0;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    gap: 16px;
+    z-index: 30;
+    pointer-events: auto;
+}
+
+.arrow-btn {
+    width: 58px;
+    height: 52px;
+    border-radius: 16px;
+    background: rgba(0, 184, 212, 0.25);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    border: 1.5px solid rgba(0, 229, 255, 0.45);
+    color: #ffffff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+    transition: transform 0.08s ease, background 0.1s ease;
+}
+
+.arrow-btn:active {
+    transform: scale(0.9);
+    background: rgba(0, 229, 255, 0.55);
+}
+
+/* ================= 弹窗系统 ================= */
+.modal-overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(10, 15, 25, 0.82);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 50;
+    padding: 24px;
+}
+
+.modal-card {
+    background: #1e272e;
+    border: 1.5px solid rgba(255, 255, 255, 0.15);
+    border-radius: 24px;
+    padding: 28px 24px;
+    width: 100%;
+    max-width: 360px;
+    text-align: center;
+    box-shadow: 0 20px 45px rgba(0, 0, 0, 0.6);
+}
+
+.modal-logo {
+    font-size: 52px;
+    margin-bottom: 10px;
+}
+
+.modal-title {
+    font-size: 26px;
+    font-weight: 900;
+    color: #ffc000;
+    margin-bottom: 8px;
+}
+
+.modal-desc {
+    font-size: 14px;
+    color: #d2dae2;
+    line-height: 1.6;
+    margin-bottom: 22px;
+}
+
+.gameover-stats {
+    background: rgba(0, 0, 0, 0.3);
+    border-radius: 14px;
+    padding: 12px 16px;
+    margin-bottom: 16px;
+    display: flex;
+    justify-content: space-around;
+}
+
+.stat-item {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.stat-label {
+    font-size: 12px;
+    color: #808e9b;
+}
+
+.stat-val {
+    font-size: 20px;
+    font-weight: 900;
+}
+
+.joke-card {
+    background: rgba(255, 255, 255, 0.08);
+    border-left: 3px solid #ff4757;
+    padding: 10px 12px;
+    border-radius: 8px;
+    font-size: 13px;
+    color: #fffa65;
+    text-align: left;
+    line-height: 1.5;
+    margin-bottom: 22px;
+}
+
+.modal-btn-start {
+    width: 100%;
+    padding: 14px;
+    border-radius: 14px;
+    border: none;
+    background: linear-gradient(135deg, #00cec9, #0984e3);
+    color: #ffffff;
+    font-size: 17px;
+    font-weight: 800;
+    cursor: pointer;
+    box-shadow: 0 8px 20px rgba(9, 132, 227, 0.4);
+    transition: transform 0.1s ease;
+}
+
+.modal-btn-start:active {
+    transform: scale(0.96);
+}
+
+/* 桌面端按键指南 */
+.desktop-guide {
+    position: absolute;
+    right: 28px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 220px;
+    background: rgba(26, 34, 48, 0.85);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    padding: 20px;
+    border-radius: 18px;
+    z-index: 20;
+}
+
+@media (max-width: 1024px) {
+    .desktop-guide {
+        display: none;
+    }
+}
+
+.guide-title {
+    font-size: 16px;
+    font-weight: 800;
+    color: var(--primary);
+    margin-bottom: 14px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.guide-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 10px;
+    font-size: 13px;
+    color: #d2dae2;
+}
+
+.key-tag {
+    background: rgba(255, 255, 255, 0.15);
+    padding: 3px 8px;
+    border-radius: 6px;
+    font-weight: bold;
+    color: #ffffff;
+    border: 1px solid rgba(255, 255, 255, 0.25);
+}
+
+.guide-tips {
+    margin-top: 14px;
+    padding-top: 12px;
+    border-top: 1px dashed rgba(255, 255, 255, 0.15);
+    font-size: 12px;
+    color: #808e9b;
+    line-height: 1.5;
+}
+
+/* ================= 主页面 UI 样式 (Lobby Screen) ================= */
+.lobby-overlay {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    z-index: 35;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 16px 14px 20px;
+    transition: opacity 0.35s ease, transform 0.35s ease;
+}
+
+.lobby-top-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    pointer-events: auto;
+    width: 100%;
+    gap: 6px;
+}
+
+.player-profile {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(22, 33, 44, 0.68);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.16);
+    padding: 4px 10px 4px 6px;
+    border-radius: 28px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.25);
+    flex-shrink: 0;
+}
+
+.avatar-box {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #ffeaa7, #fdcb6e);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    box-shadow: 0 2px 8px rgba(253, 203, 110, 0.4);
+}
+
+.player-meta {
+    display: flex;
+    flex-direction: column;
+}
+
+.player-name {
+    font-size: 12px;
+    font-weight: 800;
+    color: #ffffff;
+    letter-spacing: 0.3px;
+}
+
+.player-badge {
+    font-size: 9px;
+    color: #00cec9;
+    font-weight: 700;
+    background: rgba(0, 206, 201, 0.15);
+    padding: 1px 5px;
+    border-radius: 6px;
+    display: inline-block;
+    margin-top: 1px;
+}
+
+.lobby-top-right {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    flex-shrink: 0;
+}
+
+.lobby-pill {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    background: rgba(22, 33, 44, 0.68);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.16);
+    padding: 5px 8px;
+    border-radius: 18px;
+    font-size: 12px;
+    font-weight: 800;
+    color: #ffffff;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.pill-icon {
+    font-size: 13px;
+}
+
+.btn-icon-lobby {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: rgba(22, 33, 44, 0.68);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1.5px solid rgba(255, 255, 255, 0.2);
+    color: #ffffff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    cursor: pointer;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    transition: transform 0.15s ease;
+    flex-shrink: 0;
+}
+
+.btn-icon-lobby:active {
+    transform: scale(0.9);
+}
+
+/* 中间奶龙互动区与对话气泡 */
+.lobby-center-area {
+    position: relative;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    padding-top: 24px;
+    pointer-events: none;
+}
+
+.speech-bubble {
+    position: relative;
+    background: #ffffff;
+    color: #2c3e50;
+    padding: 10px 18px;
+    border-radius: 20px;
+    font-size: 13px;
+    font-weight: 800;
+    max-width: 250px;
+    text-align: center;
+    box-shadow: 0 10px 28px rgba(0, 0, 0, 0.25), 0 0 15px rgba(255, 223, 24, 0.35);
+    pointer-events: auto;
+    cursor: pointer;
+    animation: bubbleFloat 3.2s ease-in-out infinite;
+    transform-origin: center bottom;
+    transition: transform 0.15s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.speech-bubble:active {
+    transform: scale(0.95);
+}
+
+.bubble-arrow {
+    position: absolute;
+    bottom: -9px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 0;
+    height: 0;
+    border-left: 9px solid transparent;
+    border-right: 9px solid transparent;
+    border-top: 10px solid #ffffff;
+}
+
+@keyframes bubbleFloat {
+    0%, 100% { transform: translateY(0px); }
+    50% { transform: translateY(-7px); }
+}
+
+/* 角色抚摸交互热区 */
+.character-touch-zone {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -40%);
+    width: 240px;
+    height: 290px;
+    border-radius: 30px;
+    cursor: pointer;
+    pointer-events: auto;
+    display: flex;
+    justify-content: center;
+    align-items: flex-end;
+    padding-bottom: 8px;
+    -webkit-tap-highlight-color: transparent;
+}
+
+.touch-hint {
+    background: rgba(0, 0, 0, 0.45);
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    color: #fffa65;
+    font-size: 11px;
+    font-weight: 700;
+    padding: 4px 12px;
+    border-radius: 14px;
+    animation: hintPulse 2.4s infinite ease-in-out;
+}
+
+@keyframes hintPulse {
+    0%, 100% { opacity: 0.6; transform: scale(1); }
+    50% { opacity: 1; transform: scale(1.06); }
+}
+
+/* 浮动反应表情/爱心粒子 */
+.reaction-container {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    overflow: hidden;
+}
+
+.floating-reaction {
+    position: absolute;
+    font-size: 26px;
+    animation: floatUpFade 1.2s forwards ease-out;
+    pointer-events: none;
+    user-select: none;
+}
+
+@keyframes floatUpFade {
+    0% {
+        opacity: 0;
+        transform: translate(-50%, 0) scale(0.5) rotate(0deg);
+    }
+    20% {
+        opacity: 1;
+        transform: translate(-50%, -20px) scale(1.2) rotate(-8deg);
+    }
+    100% {
+        opacity: 0;
+        transform: translate(-50%, -90px) scale(1.4) rotate(15deg);
+    }
+}
+
+/* 右侧玩法拓展快捷菜单 */
+.lobby-side-dock {
+    position: absolute;
+    right: 8px;
+    top: 74px;
+    display: flex;
+    flex-direction: column;
+    gap: 9px;
+    pointer-events: auto;
+    z-index: 50;
+}
+
+.dock-btn {
+    position: relative;
+    background: rgba(22, 33, 44, 0.76);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 14px;
+    width: 44px;
+    padding: 6px 2px 4px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1px;
+    color: #ffffff;
+    cursor: pointer;
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.3);
+    transition: transform 0.15s ease, background 0.15s ease;
+}
+
+.dock-btn:active {
+    transform: scale(0.92);
+}
+
+.dock-icon {
+    font-size: 18px;
+}
+
+.dock-title {
+    font-size: 9px;
+    font-weight: 800;
+    color: #e0e6ed;
+}
+
+.dock-tag {
+    position: absolute;
+    top: -5px;
+    right: -5px;
+    background: #00cec9;
+    color: #111;
+    font-size: 8px;
+    font-weight: 900;
+    padding: 1px 4px;
+    border-radius: 6px;
+}
+
+.dock-tag.new-tag {
+    background: #ff4757;
+    color: #ffffff;
+}
+
+.dock-dot {
+    position: absolute;
+    top: 3px;
+    right: 3px;
+    width: 8px;
+    height: 8px;
+    background: #ff4757;
+    border-radius: 50%;
+    box-shadow: 0 0 6px #ff4757;
+}
+
+/* 底部操作区与开始跑酷按钮 */
+.lobby-footer {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    align-items: center;
+    pointer-events: auto;
+    width: 100%;
+}
+
+.lobby-map-card {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    background: rgba(22, 33, 44, 0.72);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.16);
+    padding: 7px 14px;
+    border-radius: 16px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+}
+
+.map-card-left {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.map-flag {
+    font-size: 11px;
+    color: #95a5a6;
+    font-weight: 600;
+}
+
+.map-title-lobby {
+    font-size: 13px;
+    font-weight: 800;
+    color: #f1c40f;
+}
+
+.btn-change-map {
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    color: #ffffff;
+    font-size: 11px;
+    font-weight: 700;
+    padding: 4px 10px;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: background 0.15s ease;
+}
+
+.btn-change-map:active {
+    background: rgba(255, 255, 255, 0.25);
+}
+
+/* 核心开始跑酷按钮 (大号爆款质感，带光晕微动) */
+.btn-start-run {
+    width: 100%;
+    padding: 14px 18px 12px;
+    border-radius: 20px;
+    border: none;
+    background: linear-gradient(135deg, #ff9f43 0%, #ee5253 100%);
+    box-shadow: 0 8px 25px rgba(238, 82, 83, 0.5), 0 0 20px rgba(255, 159, 67, 0.35);
+    color: #ffffff;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 3px;
+    position: relative;
+    overflow: hidden;
+    animation: startRunPulse 2.2s infinite ease-in-out;
+    transition: transform 0.12s ease;
+}
+
+.btn-start-run:active {
+    transform: scale(0.96);
+}
+
+.btn-run-content {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.btn-run-icon {
+    font-size: 18px;
+}
+
+.btn-run-text {
+    font-size: 20px;
+    font-weight: 900;
+    letter-spacing: 1px;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.btn-run-sub {
+    font-size: 11px;
+    color: rgba(255, 255, 255, 0.88);
+    font-weight: 600;
+}
+
+@keyframes startRunPulse {
+    0%, 100% {
+        box-shadow: 0 8px 25px rgba(238, 82, 83, 0.5), 0 0 20px rgba(255, 159, 67, 0.35);
+        transform: scale(1);
+    }
+    50% {
+        box-shadow: 0 12px 35px rgba(238, 82, 83, 0.7), 0 0 30px rgba(255, 159, 67, 0.55);
+        transform: scale(1.02);
+    }
+}
+
+/* ================= 拓展玩法通用弹窗样式 ================= */
+.modal-wide {
+    max-width: 440px;
+}
+
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px;
+}
+
+.btn-close-modal {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.1);
+    border: none;
+    color: #ffffff;
+    font-size: 16px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.modal-btn-row {
+    display: flex;
+    gap: 10px;
+    width: 100%;
+}
+
+.modal-btn-secondary {
+    flex: 1;
+    padding: 14px;
+    border-radius: 14px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    background: rgba(255, 255, 255, 0.12);
+    color: #ffffff;
+    font-size: 15px;
+    font-weight: 800;
+    cursor: pointer;
+    transition: transform 0.1s ease;
+}
+
+.modal-btn-secondary:active {
+    transform: scale(0.96);
+}
+
+/* 地图列表卡片 */
+.map-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-top: 14px;
+    max-height: 380px;
+    overflow-y: auto;
+}
+
+.map-card-item {
+    background: rgba(255, 255, 255, 0.08);
+    border: 1.5px solid rgba(255, 255, 255, 0.15);
+    border-radius: 16px;
+    padding: 12px 14px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.map-card-item.active {
+    background: rgba(243, 156, 18, 0.18);
+    border-color: #f39c12;
+    box-shadow: 0 4px 15px rgba(243, 156, 18, 0.25);
+}
+
+.map-card-item.locked {
+    opacity: 0.65;
+    cursor: not-allowed;
+    border-style: dashed;
+}
+
+.map-card-item:hover:not(.locked) {
+    transform: translateY(-2px);
+    background: rgba(255, 255, 255, 0.14);
+}
+
+.map-item-left {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.map-item-icon {
+    font-size: 28px;
+}
+
+.map-item-info {
+    display: flex;
+    flex-direction: column;
+    text-align: left;
+}
+
+.map-item-name {
+    font-size: 15px;
+    font-weight: 800;
+    color: #ffffff;
+}
+
+.map-item-desc {
+    font-size: 11px;
+    color: #a4b0be;
+    margin-top: 2px;
+}
+
+.map-item-badge {
+    font-size: 11px;
+    font-weight: 800;
+    padding: 4px 10px;
+    border-radius: 10px;
+}
+
+.map-item-badge.active-badge {
+    background: #f39c12;
+    color: #111;
+}
+
+.map-item-badge.lock-badge {
+    background: rgba(255, 255, 255, 0.15);
+    color: #d2dae2;
+}
+
+/* 衣橱装扮网格 */
+.skin-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+    margin-top: 14px;
+}
+
+.skin-card {
+    background: rgba(255, 255, 255, 0.08);
+    border: 1.5px solid rgba(255, 255, 255, 0.15);
+    border-radius: 14px;
+    padding: 14px 8px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+}
+
+.skin-card.active {
+    border-color: #f1c40f;
+    background: rgba(241, 196, 15, 0.15);
+}
+
+.skin-card.locked {
+    opacity: 0.6;
+}
+
+.skin-emoji {
+    font-size: 32px;
+}
+
+.skin-name {
+    font-size: 12px;
+    font-weight: 800;
+    color: #ffffff;
+}
+
+.skin-tag {
+    font-size: 10px;
+    font-weight: 700;
+    color: #f1c40f;
+}
+
+.skin-tag.lock-tag {
+    color: #a4b0be;
+}
+
+/* 里程排行榜 */
+.rank-list {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-top: 12px;
+}
+
+.rank-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: rgba(255, 255, 255, 0.08);
+    padding: 10px 14px;
+    border-radius: 12px;
+    font-size: 13px;
+    font-weight: 700;
+}
+
+.rank-top1 { color: #f1c40f; background: rgba(241, 196, 15, 0.15); }
+.rank-top2 { color: #d2dae2; }
+.rank-top3 { color: #e67e22; }
+
+.rank-item.my-rank {
+    border: 1.5px solid #00cec9;
+    background: rgba(0, 206, 201, 0.15);
+    margin-top: 6px;
+}
+
+/* 每日补给奖励框 */
+.reward-box {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    background: rgba(241, 196, 15, 0.18);
+    border: 2px dashed #f1c40f;
+    border-radius: 16px;
+    padding: 16px;
+    margin: 14px 0 20px;
+}
+
+.reward-icon {
+    font-size: 28px;
+}
+
+.reward-num {
+    font-size: 20px;
+    font-weight: 900;
+    color: #fffa65;
+}
+

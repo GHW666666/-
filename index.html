@@ -1,32 +1,368 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-  <title>奶娃跑跑 - 地铁跑酷鬼畜版 (微信 & 抖音小游戏)</title>
-  <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-      -webkit-touch-callout: none;
-      -webkit-user-select: none;
-      user-select: none;
-    }
-    html, body {
-      width: 100%;
-      height: 100%;
-      overflow: hidden;
-      background-color: #87ceeb;
-    }
-    canvas {
-      display: block;
-      width: 100%;
-      height: 100%;
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>奶蛙快跑！- 埃及·砂岩集市 3D跑酷大冲刺</title>
+    <meta name="description" content="全3D跑酷小游戏《奶蛙快跑》，3D奶龙模型、埃及砂岩集市、引桥车顶冲刺、爽快滑铲与变道。">
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <script type="module" src="/main.js"></script>
+    <!-- 动感氛围光晕背景 -->
+    <div class="bg-ambient"></div>
+
+    <div class="game-wrapper">
+        <!-- 核心游戏画布与HUD容器 -->
+        <main class="canvas-container" id="gameContainer">
+            <!-- 3D WebGL 画布 -->
+            <canvas id="gameCanvas"></canvas>
+
+            <!-- 顶部 HUD 界面 (游戏跑酷中显示) -->
+            <div class="hud-top" id="hudTop" style="display: none;">
+                <!-- 左上：暂停键 + 关卡卡片 -->
+                <div class="hud-left">
+                    <button class="btn-pause" id="btnPause" aria-label="暂停游戏">
+                        <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor">
+                            <rect x="5" y="4" width="4" height="16" rx="1.5" />
+                            <rect x="15" y="4" width="4" height="16" rx="1.5" />
+                        </svg>
+                    </button>
+
+                    <div class="stage-card" id="stageCard">
+                        <div class="stage-header">
+                            <span class="stage-name" id="stageName">埃及</span>
+                            <span class="stage-timer" id="stageTimer">30s</span>
+                        </div>
+                        <div class="stage-sub" id="stageSub">砂岩集市</div>
+                        <div class="stage-progress-bg">
+                            <div class="stage-progress-fill" id="stageProgressBar"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 右上：倍率 + 计米里程表 + 金币统计 -->
+                <div class="hud-right">
+                    <div class="score-pill">
+                        <span class="multiplier-tag" id="multiplierTag">*2</span>
+                        <span class="score-text" id="scoreText">000000 米</span>
+                    </div>
+
+                    <div class="coin-pill">
+                        <span class="coin-star">⭐</span>
+                        <span class="coin-text" id="coinText">0</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 左下：速度与屋顶冲刺仪表卡片 (游戏跑酷中显示) -->
+            <div class="hud-speed-card" id="hudSpeed" style="display: none;">
+                <div class="speed-row">
+                    <span class="speed-val" id="speedValue">26</span>
+                    <span class="speed-unit">m/s</span>
+                </div>
+                <div class="speed-status-tag" id="statusTag">极限巡航</div>
+            </div>
+
+            <!-- 底部四向虚拟触控按键 (游戏跑酷中显示) -->
+            <div class="touch-controls" id="touchControls" style="display: none;">
+                <button class="arrow-btn" id="btnLeft" aria-label="向左变道">
+                    <svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor">
+                        <path d="M15 19l-7-7 7-7" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+                    </svg>
+                </button>
+                <button class="arrow-btn" id="btnJump" aria-label="跳跃">
+                    <svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor">
+                        <path d="M5 15l7-7 7 7" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+                    </svg>
+                </button>
+                <button class="arrow-btn" id="btnSlide" aria-label="滑铲">
+                    <svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor">
+                        <path d="M19 9l-7 7-7-7" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+                    </svg>
+                </button>
+                <button class="arrow-btn" id="btnRight" aria-label="向右变道">
+                    <svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor">
+                        <path d="M9 5l7 7-7 7" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+                    </svg>
+                </button>
+            </div>
+
+            <!-- ================= 主页面 UI (奶龙正脸互动与未来玩法扩展) ================= -->
+            <div class="lobby-overlay" id="lobbyOverlay">
+                <!-- 顶部状态栏：玩家信息、金币、历史最佳、音效开关 -->
+                <header class="lobby-top-bar">
+                    <div class="player-profile">
+                        <div class="avatar-box">🦖</div>
+                        <div class="player-meta">
+                            <span class="player-name">奶龙大队长</span>
+                            <span class="player-badge">Lv.3 跑酷萌新</span>
+                        </div>
+                    </div>
+
+                    <div class="lobby-top-right">
+                        <div class="lobby-pill" id="lobbyCoinsPill" title="当前金币">
+                            <span class="pill-icon">⭐</span>
+                            <span class="pill-text" id="lobbyCoins">0</span>
+                        </div>
+                        <div class="lobby-pill" id="lobbyRankPill" title="历史最佳成绩">
+                            <span class="pill-icon">🏆</span>
+                            <span class="pill-text" id="lobbyHighScore">0m</span>
+                        </div>
+                        <button class="btn-icon-lobby" id="btnMute" aria-label="声音开关" title="声音开关">
+                            <span id="muteIcon">🔊</span>
+                        </button>
+                    </div>
+                </header>
+
+                <!-- 中间奶龙互动区：气泡对话框 + 触摸热区 + 飘心特效容器 -->
+                <div class="lobby-center-area">
+                    <!-- 奶龙说话气泡 -->
+                    <div class="speech-bubble" id="speechBubble">
+                        <span class="bubble-txt" id="bubbleText">快摸摸我的大肚皮，等下要冲上火车顶啦！</span>
+                        <div class="bubble-arrow"></div>
+                    </div>
+
+                    <!-- 奶龙点击抚摸互动热区 -->
+                    <div class="character-touch-zone" id="characterTouchZone" title="点击摸摸奶龙">
+                        <div class="touch-hint">👆 点击摸摸肚皮</div>
+                    </div>
+
+                    <!-- 动态浮动爱心/星星粒子容器 -->
+                    <div class="reaction-container" id="reactionContainer"></div>
+                </div>
+
+                <!-- 右侧玩法拓展快捷菜单 (未来更多玩法预留) -->
+                <aside class="lobby-side-dock">
+                    <button class="dock-btn" id="btnOpenMaps" title="地图漫游">
+                        <span class="dock-icon">🗺️</span>
+                        <span class="dock-title">地图</span>
+                        <span class="dock-tag">埃及</span>
+                    </button>
+                    <button class="dock-btn" id="btnOpenWardrobe" title="奶龙衣橱">
+                        <span class="dock-icon">🎒</span>
+                        <span class="dock-title">衣橱</span>
+                        <span class="dock-tag new-tag">NEW</span>
+                    </button>
+                    <button class="dock-btn" id="btnOpenRank" title="荣誉天梯">
+                        <span class="dock-icon">🏆</span>
+                        <span class="dock-title">排行</span>
+                    </button>
+                    <button class="dock-btn" id="btnOpenDaily" title="每日补给">
+                        <span class="dock-icon">🎁</span>
+                        <span class="dock-title">补给</span>
+                        <span class="dock-dot"></span>
+                    </button>
+                </aside>
+
+                <!-- 底部主操作区：当前地图指示卡 + 醒目大号开始跑酷按钮 -->
+                <footer class="lobby-footer">
+                    <div class="lobby-map-card" id="lobbyMapCard">
+                        <div class="map-card-left">
+                            <span class="map-flag">📍 当前地图</span>
+                            <span class="map-title-lobby" id="lobbyMapTitle">埃及·砂岩集市 🏛️</span>
+                        </div>
+                        <button class="btn-change-map" id="btnChangeMap">切换地图 ></button>
+                    </div>
+
+                    <!-- 核心开始按钮：大号高亮炫彩动效 -->
+                    <button class="btn-start-run" id="btnStartRun">
+                        <div class="btn-run-content">
+                            <span class="btn-run-icon">▶</span>
+                            <span class="btn-run-text">出发！开始跑酷</span>
+                        </div>
+                        <div class="btn-run-sub">顺着引桥冲上车顶，开启屋顶冲刺！</div>
+                    </button>
+                </footer>
+            </div>
+
+            <!-- ================= 弹窗系统 (地图选择、衣橱、排行、每日奖励) ================= -->
+            <!-- 1. 地图选择弹窗 (支持未来扩展) -->
+            <div class="modal-overlay" id="mapModal" style="display: none;">
+                <div class="modal-card modal-wide">
+                    <div class="modal-header">
+                        <h2 class="modal-title">🗺️ 选择冒险地图</h2>
+                        <button class="btn-close-modal" id="btnCloseMapModal">✕</button>
+                    </div>
+                    <p class="modal-desc">探索不同风格的跑酷世界！主页面与跑酷环境将随地图实时变换：</p>
+                    <div class="map-list" id="mapListContainer">
+                        <!-- 动态渲染地图卡片 -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- 2. 衣橱装扮弹窗 (预留未来玩法) -->
+            <div class="modal-overlay" id="wardrobeModal" style="display: none;">
+                <div class="modal-card">
+                    <div class="modal-header">
+                        <h2 class="modal-title">🎒 奶龙衣橱</h2>
+                        <button class="btn-close-modal" id="btnCloseWardrobeModal">✕</button>
+                    </div>
+                    <p class="modal-desc">为你的专属奶龙挑选炫酷服饰！</p>
+                    <div class="skin-grid">
+                        <div class="skin-card active">
+                            <div class="skin-emoji">🦖</div>
+                            <div class="skin-name">经典暖萌黄</div>
+                            <span class="skin-tag">已穿戴</span>
+                        </div>
+                        <div class="skin-card locked">
+                            <div class="skin-emoji">👑</div>
+                            <div class="skin-name">埃及法老王</div>
+                            <span class="skin-tag lock-tag">敬请期待</span>
+                        </div>
+                        <div class="skin-card locked">
+                            <div class="skin-emoji">✨</div>
+                            <div class="skin-name">纯金闪耀龙</div>
+                            <span class="skin-tag lock-tag">敬请期待</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 3. 排行榜弹窗 -->
+            <div class="modal-overlay" id="rankModal" style="display: none;">
+                <div class="modal-card">
+                    <div class="modal-header">
+                        <h2 class="modal-title">🏆 砂岩集市里程榜</h2>
+                        <button class="btn-close-modal" id="btnCloseRankModal">✕</button>
+                    </div>
+                    <div class="rank-list">
+                        <div class="rank-item rank-top1">
+                            <span class="rank-idx">🥇 1</span>
+                            <span class="rank-name">神庙老司机奶龙</span>
+                            <span class="rank-score">102,400 米</span>
+                        </div>
+                        <div class="rank-item rank-top2">
+                            <span class="rank-idx">🥈 2</span>
+                            <span class="rank-name">许嵩的铁杆跑客</span>
+                            <span class="rank-score">68,920 米</span>
+                        </div>
+                        <div class="rank-item rank-top3">
+                            <span class="rank-idx">🥉 3</span>
+                            <span class="rank-name">车顶冲刺王</span>
+                            <span class="rank-score">45,110 米</span>
+                        </div>
+                        <div class="rank-item my-rank">
+                            <span class="rank-idx">📍 我</span>
+                            <span class="rank-name">奶龙大队长</span>
+                            <span class="rank-score" id="rankMyScore">0 米</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 4. 每日好运补给弹窗 -->
+            <div class="modal-overlay" id="dailyModal" style="display: none;">
+                <div class="modal-card">
+                    <div class="modal-header">
+                        <h2 class="modal-title">🎁 每日好运补给</h2>
+                        <button class="btn-close-modal" id="btnCloseDailyModal">✕</button>
+                    </div>
+                    <div class="modal-logo" style="margin: 10px 0;">🎉⭐</div>
+                    <p class="modal-desc">恭喜获得今日砂岩集市探险物资！</p>
+                    <div class="reward-box">
+                        <span class="reward-icon">⭐</span>
+                        <span class="reward-num">+100 金币</span>
+                    </div>
+                    <button class="modal-btn-start" id="btnClaimDaily">开心收下！</button>
+                </div>
+            </div>
+
+            <!-- 暂停弹窗 -->
+            <div class="modal-overlay" id="pauseModal" style="display: none;">
+                <div class="modal-card">
+                    <h2 class="modal-title">⏸ 游戏暂停</h2>
+                    <p class="modal-desc">歇口气，深呼吸，准备再次狂奔！</p>
+                    <div class="modal-btn-row">
+                        <button class="modal-btn-start" id="btnResume">继续冲刺 ▶</button>
+                        <button class="modal-btn-secondary" id="btnPauseToLobby">🏠 返回主页</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 游戏结算弹窗 (包含对标图魔性热评) -->
+            <div class="modal-overlay" id="gameOverModal" style="display: none;">
+                <div class="modal-card">
+                    <div class="modal-logo">💫😵</div>
+                    <h2 class="modal-title" style="color: #ff4757;">跑酷翻车啦！</h2>
+                    <div class="gameover-stats">
+                        <div class="stat-item">
+                            <span class="stat-label">本次奔跑里程</span>
+                            <span class="stat-val" id="finalScore" style="color: #f1c40f;">0 米</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-label">收获黄金金币</span>
+                            <span class="stat-val" id="finalCoins" style="color: #fffa65;">0</span>
+                        </div>
+                    </div>
+                    <div class="joke-card" id="deathJoke">
+                        等我奶蛙跑酷达到10万米我也要去问问许嵩 那阵子我们的感情到底出了什么问题#奶娃
+                    </div>
+                    <div class="modal-btn-row">
+                        <button class="modal-btn-start" id="btnRestart">再次挑战 🔄</button>
+                        <button class="modal-btn-secondary" id="btnGameOverToLobby">🏠 返回主页</button>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <!-- 桌面端侧边操作指南 -->
+        <aside class="desktop-guide">
+            <div class="guide-title">
+                <span>🎮</span> 键位指南
+            </div>
+            <div class="guide-item">
+                <span>向左变道</span>
+                <span class="key-tag">A / ◀</span>
+            </div>
+            <div class="guide-item">
+                <span>向右变道</span>
+                <span class="key-tag">D / ▶</span>
+            </div>
+            <div class="guide-item">
+                <span>起跳翻越</span>
+                <span class="key-tag">W / 空格</span>
+            </div>
+            <div class="guide-item">
+                <span>贴地滑铲</span>
+                <span class="key-tag">S / ▼</span>
+            </div>
+            <div class="guide-tips">
+                📱 手机端直接在屏幕上自由滑动，或轻触下方青色方向按钮操控！
+            </div>
+        </aside>
+    </div>
+
+    <!-- 游戏启动脚本 -->
+    <script type="module">
+        import { GameEngine } from './game/main.js';
+        import { platform } from './game/adapter.js';
+
+        // 启动 3D 游戏引擎
+        const engine = new GameEngine();
+        engine.init();
+
+        const urlParams = new URLSearchParams(window.location.search);
+        if (urlParams.get('autostart')) {
+            engine.start();
+        }
+
+        // 绑定底部虚拟按键手势
+        const bindBtn = (id, gesture) => {
+            const btn = document.getElementById(id);
+            if (!btn) return;
+            const trigger = (e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                platform.notifyGesture(gesture);
+            };
+            btn.addEventListener('touchstart', trigger, { passive: false });
+            btn.addEventListener('mousedown', trigger);
+        };
+
+        bindBtn('btnLeft', 'swipe_left');
+        bindBtn('btnRight', 'swipe_right');
+        bindBtn('btnJump', 'swipe_up');
+        bindBtn('btnSlide', 'swipe_down');
+    </script>
 </body>
 </html>
