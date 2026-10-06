@@ -1,5 +1,5 @@
-/**
- * 奶娃快跑 - 三渲二 (Cel-Shaded) 障碍物与道具系统
+﻿/**
+ * 奶蛙快跑 - 三渲二 (Cel-Shaded) 障碍物与道具系统
  * 视觉呈现强烈的日漫/国漫三渲二卡通体量感与硬朗描边，玩起来是利落干净的2D赛道判定
  */
 import { CONFIG } from './config.js';
@@ -254,7 +254,7 @@ export class Train {
         ctx.closePath();
         ctx.fill();
 
-        // 6. 车头前脸魔性奶娃头像涂鸦！
+        // 6. 车头前脸魔性奶蛙头像涂鸦！
         ctx.fillStyle = '#FFDD59';
         ctx.beginPath();
         ctx.arc(0, winY + winH / 2, 22 * scale, 0, Math.PI * 2);
@@ -263,7 +263,7 @@ export class Train {
         ctx.lineWidth = 2 * scale;
         ctx.stroke();
 
-        // 奶娃绿眼
+        // 奶蛙绿眼
         ctx.fillStyle = '#00B894';
         ctx.beginPath();
         ctx.arc(-8 * scale, winY + winH / 2 - 2 * scale, 5 * scale, 0, Math.PI * 2);

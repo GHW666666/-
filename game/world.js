@@ -1,5 +1,5 @@
-/**
- * 奶娃快跑 - 3D透视世界、场景视差、障碍物生成与粒子特效系统
+﻿/**
+ * 奶蛙快跑 - 3D透视世界、场景视差、障碍物生成与粒子特效系统
  */
 import { CONFIG } from './config.js';
 import { Coin, PropItem, Train, HighBarrier, LowBarrier } from './obstacles.js';

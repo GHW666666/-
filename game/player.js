@@ -1,5 +1,5 @@
-/**
- * 奶娃快跑 - 角色控制与魔性动画系统
+﻿/**
+ * 奶蛙快跑 - 角色控制与魔性动画系统
  */
 import { CONFIG } from './config.js';
 import { audio } from './audio.js';
@@ -299,7 +299,7 @@ export class Player {
         const w = CONFIG.PLAYER.WIDTH * sx;
         const h = CONFIG.PLAYER.HEIGHT * sy;
 
-        // 如果已加载奶娃高清立绘素材，结合三渲二动漫描边与动态奔跑渲染
+        // 如果已加载奶蛙高清立绘素材，结合三渲二动漫描边与动态奔跑渲染
         if (this.frogImg && this.frogImg.complete && this.frogImg.naturalWidth > 0) {
             ctx.save();
             const drawW = w * 1.40;
@@ -314,7 +314,7 @@ export class Player {
             ctx.drawImage(this.frogImg, posX, posY, drawW, drawH);
             ctx.restore();
 
-            // 2. 奶娃二次元主体
+            // 2. 奶蛙二次元主体
             ctx.drawImage(this.frogImg, posX, posY, drawW, drawH);
 
             // 3. 奔跑时的动漫白色圆环烟雾圈 (Anime Dust Puffs)

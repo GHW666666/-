@@ -1,5 +1,5 @@
-/**
- * 奶娃快跑 - 3D 埃及·砂岩集市 (Egyptian Sandstone Bazaar) 跑道与场景系统
+﻿/**
+ * 奶蛙快跑 - 3D 埃及·砂岩集市 (Egyptian Sandstone Bazaar) 跑道与场景系统
  * 100% 还原对标图：托勒密风砂岩回廊石柱、蓝白条纹集市遮阳棚、陶盆绿植棕榈树、横跨拱门、三道金属铁轨与远景金字塔
  */
 import * as THREE from '../libs/three.module.js';

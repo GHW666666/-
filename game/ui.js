@@ -1,5 +1,5 @@
-/**
- * 奶娃快跑 - 高度定制 UI 系统 (包含主页面互动、地图漫游、拓展玩法弹窗与对标跑酷 HUD)
+﻿/**
+ * 奶蛙快跑 - 高度定制 UI 系统 (包含主页面互动、地图漫游、拓展玩法弹窗与对标跑酷 HUD)
  */
 export class UIManager {
     constructor() {
@@ -280,7 +280,7 @@ export class UIManager {
             this.dom.gameOverModal.style.display = 'flex';
             if (this.dom.finalScore) this.dom.finalScore.textContent = `${Math.floor(score)} 米`;
             if (this.dom.finalCoins) this.dom.finalCoins.textContent = `${coins}`;
-            if (this.dom.deathJoke) this.dom.deathJoke.textContent = joke || '等我奶蛙跑酷达到10万米我也要去问问许嵩 那阵子我们的感情到底出了什么问题#奶娃';
+            if (this.dom.deathJoke) this.dom.deathJoke.textContent = joke || '等我奶蛙跑酷达到10万米我也要去问问许嵩 那阵子我们的感情到底出了什么问题#奶蛙';
         }
     }
 

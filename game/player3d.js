@@ -1,5 +1,5 @@
-/**
- * 奶娃快跑 - 3D 玩家物理控制器、赛道变道、车顶与引桥攀爬判定
+﻿/**
+ * 奶蛙快跑 - 3D 玩家物理控制器、赛道变道、车顶与引桥攀爬判定
  */
 import * as THREE from '../libs/three.module.js';
 import { CONFIG } from './config.js';

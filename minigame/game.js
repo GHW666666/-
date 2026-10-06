@@ -1,5 +1,5 @@
-/**
- * 奶娃快跑 - 微信 / 抖音小游戏原生入口文件
+﻿/**
+ * 奶蛙快跑 - 微信 / 抖音小游戏原生入口文件
  * 当移植到微信小游戏或抖音小游戏项目工程根目录时，使用此文件作为主启动脚本
  */
 import { GameEngine } from './game/main.js';
@@ -17,4 +17,4 @@ if (typeof wx !== 'undefined' && wx.createCanvas) {
 const engine = new GameEngine();
 engine.init(mainCanvas);
 
-console.log('[奶娃快跑] 小游戏引擎初始化完毕，当前平台:', platform.env);
+console.log('[奶蛙快跑] 小游戏引擎初始化完毕，当前平台:', platform.env);

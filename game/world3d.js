@@ -1,5 +1,5 @@
-/**
- * 奶娃快跑 - 3D 场景总控、摄像机跟踪、光影系统与程序化障碍物生成
+﻿/**
+ * 奶蛙快跑 - 3D 场景总控、摄像机跟踪、光影系统与程序化障碍物生成
  */
 import * as THREE from '../libs/three.module.js';
 import { CONFIG } from './config.js';
