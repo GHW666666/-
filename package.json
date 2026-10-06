@@ -1,0 +1,28 @@
+{
+  "name": "naiwa-runner",
+  "version": "1.0.0",
+  "description": "中国互联网鬼畜跑酷小游戏 - 奶娃跑跑 (微信小游戏 + 抖音小游戏 + H5双端移植)",
+  "main": "game.js",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "build:minigame": "node tools/build-minigame.js",
+    "serve": "npx serve ."
+  },
+  "keywords": [
+    "minigame",
+    "wechat-game",
+    "douyin-game",
+    "runner",
+    "threejs"
+  ],
+  "author": "origin-smart",
+  "license": "MIT",
+  "dependencies": {
+    "three": "^0.186.1"
+  },
+  "devDependencies": {
+    "vite": "^8.3.3"
+  }
+}

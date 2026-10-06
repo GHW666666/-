@@ -1,0 +1,14 @@
+{
+  "miniprogramRoot": "./",
+  "projectname": "naiwa-runner",
+  "description": "奶娃跑跑 - 微信小游戏 (支持一键移植抖音)",
+  "appid": "touristappid",
+  "setting": {
+    "urlCheck": false,
+    "es6": true,
+    "enhance": true,
+    "postcss": false,
+    "minified": true
+  },
+  "compileType": "game"
+}

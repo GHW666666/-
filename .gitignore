@@ -1,0 +1,6 @@
+node_modules/
+dist/
+dist-minigame/
+.DS_Store
+*.log
+.claude/
