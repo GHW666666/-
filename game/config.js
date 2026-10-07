@@ -52,6 +52,10 @@ export const CONFIG = {
         TRAIN_LENGTH: 15.0,   // 火车长度
         RAMP_LENGTH: 11.5,    // 引桥斜坡长度
         RAMP_HEIGHT: 2.45,    // 引桥最高端高度
+        LONG_VEHICLE_LENGTH: 220,
+        VEHICLE_ROOF_FIRST_BARRIER: 40,
+        VEHICLE_ROOF_BARRIER_GAP: 100, // 留出最高速度、弹簧鞋落地及下一次动作的时间
+        VEHICLE_ROUTE_EXIT_GAP: 35,
     },
 
     // 道具持续时间 (秒)
@@ -60,7 +64,10 @@ export const CONFIG = {
         MAGNET: 8.0,        // 大磁铁（全屏磁吸金币）
         SHOE: 8.0,          // 弹簧鞋（超高跳跃翻越列车）
         SHIELD: 999.0,      // 护盾（持续到被消耗抵消1次碰撞）
+        FLIGHT: 8.0,        // 羽毛激活翅膀，限时空中金币航道
     },
+
+    FLIGHT: { HEIGHT: 12, LANDING_DURATION: 1.1, LANDING_GRACE: 1.5 },
 
     // 磁铁吸附范围 (米)
     MAGNET_RANGE: 16.0,

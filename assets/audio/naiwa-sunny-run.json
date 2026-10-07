@@ -1,0 +1,21 @@
+{
+  "title": "奶蛙的晴天小跑",
+  "description": "原创无歌词跑酷配乐。木琴用带停顿的八小节动机展开，轻柔切分拨弦、暖低音与轻鼓保持愉快小跑感；低强度铃音只在少量句尾点缀，为游戏音效留出空间。",
+  "creation": "Original composition and offline procedural instrument synthesis",
+  "bpm": 124,
+  "key": "C major",
+  "bars": 32,
+  "durationSeconds": 61.93548752834467,
+  "sampleRate": 44100,
+  "channels": 2,
+  "sourceWav": "output/music/naiwa-sunny-run.wav",
+  "gameAsset": "assets/audio/naiwa-sunny-run.mp3",
+  "mp3Bytes": 991917,
+  "bitrateKbps": 128,
+  "peakDb": -1.7237229523256667,
+  "rmsDb": -17.79065978918991,
+  "loopBoundaryDifference": [
+    0.003963802914984371,
+    0.004166203482326803
+  ]
+}

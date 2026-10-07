@@ -1,0 +1,136 @@
+{
+  "size": 128,
+  "source": "Existing browser inline SVGs, resolved CSS; native PNG export",
+  "assets": {
+    "coin": {
+      "path": "assets/ui/coin.png",
+      "bytes": 3983,
+      "sha256": "e5f0e3f1fe93b02d305790dd45c1c499b66c1e05145502332a36fbf9c36ded7a"
+    },
+    "trophy": {
+      "path": "assets/ui/trophy.png",
+      "bytes": 1498,
+      "sha256": "280bdf1613ea9da67f66e9fe78827b083974dcaa54d9f4bf822397ef0332b5a6"
+    },
+    "map": {
+      "path": "assets/ui/map.png",
+      "bytes": 1527,
+      "sha256": "6f3959e33f7c642820759c9476b238c5b6c8f07f6456e7534787d4b764578e42"
+    },
+    "wardrobe": {
+      "path": "assets/ui/wardrobe.png",
+      "bytes": 1436,
+      "sha256": "da28d6a1d371a831a9be0ce88bce0b4946fe46e67f1f023907e19d439a412744"
+    },
+    "achievement": {
+      "path": "assets/ui/achievement.png",
+      "bytes": 3391,
+      "sha256": "bcbd14c95da6daa1bda19f524f7149322bfbf437a27547469854e33a790a1ab0"
+    },
+    "rank": {
+      "path": "assets/ui/rank.png",
+      "bytes": 1763,
+      "sha256": "44fed716e7c51871738acb5ee1766126ebf99db682304fd27087b1a68fa6f179"
+    },
+    "daily": {
+      "path": "assets/ui/daily.png",
+      "bytes": 1556,
+      "sha256": "3273220ed43fd0904d32b54e68abb0e6908ad3f7d4b3295b9f3d55c9a58373f0"
+    },
+    "skin-none": {
+      "path": "assets/ui/skin-none.png",
+      "bytes": 3517,
+      "sha256": "b98347e0ac2901b818ae29b893708eb69271ea11513db39b4e8d9faa44c9a96f"
+    },
+    "skin-nurse": {
+      "path": "assets/ui/skin-nurse.png",
+      "bytes": 1751,
+      "sha256": "b39f27d97a4ac7ef5e6c75419ee79e31b7928c4df02057fe278f8fcc68125372"
+    },
+    "skin-bandit": {
+      "path": "assets/ui/skin-bandit.png",
+      "bytes": 2366,
+      "sha256": "6755e586e29b28dfc735e73a3d96b98307a146fcf317b7a105965d92e3553edd"
+    },
+    "skin-street": {
+      "path": "assets/ui/skin-street.png",
+      "bytes": 2091,
+      "sha256": "11f9040124ef5350a784797ecc5f2cfba81646c0d71d8d3ab86eae8debabcbaa"
+    },
+    "skin-ufo": {
+      "path": "assets/ui/skin-ufo.png",
+      "bytes": 3939,
+      "sha256": "21a7871c7e6c9f68c1ed15fb3684b7248387c857ecf9b10af02c501451de70b7"
+    },
+    "skin-tv": {
+      "path": "assets/ui/skin-tv.png",
+      "bytes": 3196,
+      "sha256": "3d72a81e3d360116372f6fdace5396cc0e8235d5177b86f2d5b78f8ad45568a3"
+    },
+    "skin-jellyfish": {
+      "path": "assets/ui/skin-jellyfish.png",
+      "bytes": 3381,
+      "sha256": "31667052ce66552b1a26002386cc2c40d7bfee14fa0b91629cd764bcccfb8223"
+    },
+    "skin-mushroom": {
+      "path": "assets/ui/skin-mushroom.png",
+      "bytes": 4283,
+      "sha256": "62c09068b78fb2f69aca59700776da51919f456b277c3e0e1bd8f3a47a35612e"
+    },
+    "skin-zipper": {
+      "path": "assets/ui/skin-zipper.png",
+      "bytes": 4484,
+      "sha256": "9b21ebd7cade30853327ff2eff5ff4faab4c07e68f125b442af45ff5f9832072"
+    },
+    "skin-dumpling": {
+      "path": "assets/ui/skin-dumpling.png",
+      "bytes": 3220,
+      "sha256": "37cb97f5c6fa5f9656332c3da94cab4fad5c606bc85f286625b4713a7470e483"
+    },
+    "wing-none": {
+      "path": "assets/ui/wing-none.png",
+      "bytes": 2767,
+      "sha256": "c2f70c7627f4c9c150e97917ed47e06c0d9b197fc4a2e5db9d96900b0f7aecd7"
+    },
+    "wing-cream": {
+      "path": "assets/ui/wing-cream.png",
+      "bytes": 2267,
+      "sha256": "1a658a15d9fce9b44d6fc5b802578322f0f872ed8dc3f87c4938e71d88efd098"
+    },
+    "map-egypt": {
+      "path": "assets/ui/map-egypt.png",
+      "bytes": 2666,
+      "sha256": "8430803d18c40439073b35ee0adf605e629c9bac6dda653f0de1c6288dd49499"
+    },
+    "map-store": {
+      "path": "assets/ui/map-store.png",
+      "bytes": 2326,
+      "sha256": "29e0b239d82940ae70480dd4c4706ad2bfcc9fbbe8a4ee2e250f9dfa88ed9b28"
+    },
+    "map-tea": {
+      "path": "assets/ui/map-tea.png",
+      "bytes": 4150,
+      "sha256": "1cfce0129aec428e740cecda427bb3b304dcb4cee58189c579679425e0e884fe"
+    },
+    "map-pond": {
+      "path": "assets/ui/map-pond.png",
+      "bytes": 3860,
+      "sha256": "3046c37752ab7698fc031edb12090adfffc36c68528658675d959d51a1282f76"
+    },
+    "map-laundry": {
+      "path": "assets/ui/map-laundry.png",
+      "bytes": 2843,
+      "sha256": "db4cb13a10bf7155d5e6445f147383d1712e32ef0375adb975455305cf3a105d"
+    },
+    "sound-on": {
+      "path": "assets/ui/sound-on.png",
+      "bytes": 1592,
+      "sha256": "0cbad68d264cc9a3590f273f5d19dc17e6a1d1988e5084039a84f9f4496c503f"
+    },
+    "sound-off": {
+      "path": "assets/ui/sound-off.png",
+      "bytes": 1280,
+      "sha256": "4305c5955027b30faa3bbb15aa1210d69da85e00c73397330b1a1d0e5ef206d7"
+    }
+  }
+}

@@ -14,3 +14,9 @@ Thumbs.db
 .vscode/
 .idea/
 .claude/
+
+# Local tooling and generated working files
+project.private.config.json
+.wrangler/
+output/
+assets/reference/

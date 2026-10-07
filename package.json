@@ -3,9 +3,17 @@
   "version": "1.0.0",
   "type": "module",
   "scripts": {
-    "start": "npx serve ."
+    "start": "npm run build:browser && npx serve .",
+    "dev": "npm start",
+    "build:browser": "node build-browser.mjs",
+    "build:minigame": "node build-minigame.mjs",
+    "build": "node build.js",
+    "test": "node --test tests/*.test.mjs"
   },
   "dependencies": {
     "three": "^0.186.1"
+  },
+  "devDependencies": {
+    "esbuild": "0.28.2"
   }
 }

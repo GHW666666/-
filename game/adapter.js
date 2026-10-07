@@ -31,10 +31,10 @@ export class PlatformAdapter {
      */
     initCanvas(containerCanvas = null, contextType = 'webgl') {
         if (this.env === 'wechat') {
-            this.canvas = wx.createCanvas();
+            this.canvas = containerCanvas || wx.createCanvas();
             this.systemInfo = wx.getSystemInfoSync();
         } else if (this.env === 'douyin') {
-            this.canvas = tt.createCanvas();
+            this.canvas = containerCanvas || tt.createCanvas();
             this.systemInfo = tt.getSystemInfoSync();
         } else {
             this.canvas = containerCanvas || document.getElementById('gameCanvas');
@@ -102,8 +102,10 @@ export class PlatformAdapter {
             } else {
                 localStorage.setItem(key, JSON.stringify(value));
             }
+            return true;
         } catch (e) {
             console.warn('Storage write failed:', e);
+            return false;
         }
     }
 

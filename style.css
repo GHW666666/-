@@ -3,7 +3,7 @@
     --primary: #FFCC00;
     --accent: #FF4757;
     --cyan-teal: #00cec9;
-    --dark-bg: #0d131a;
+    --page-bg: #f2efe7;
     --card-cream: #fbf5e6;
     --card-text: #2c3e50;
     --hud-glass: rgba(22, 33, 44, 0.72);
@@ -22,18 +22,9 @@ body, html {
     width: 100%;
     height: 100%;
     overflow: hidden;
-    background-color: var(--dark-bg);
-    font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    background-color: var(--page-bg);
+    font-family: "Microsoft YaHei", "PingFang SC", "Segoe UI", sans-serif;
     color: #FFFFFF;
-}
-
-/* 动感背景光晕 */
-.bg-ambient {
-    position: fixed;
-    inset: 0;
-    background: radial-gradient(circle at 50% 20%, #2980b9 0%, #1a365d 45%, #0b1320 100%);
-    z-index: 0;
-    pointer-events: none;
 }
 
 /* 主游戏容器 */
@@ -53,7 +44,7 @@ body, html {
     height: 100%;
     max-width: 100%;
     max-height: 100%;
-    background: #000;
+    background: #f3ead7;
     overflow: hidden;
     touch-action: none;
     box-sizing: border-box;
@@ -63,8 +54,8 @@ body, html {
     .canvas-container {
         max-width: 460px;
         max-height: 920px;
-        border-radius: 24px;
-        box-shadow: 0 25px 60px rgba(0, 0, 0, 0.8), 0 0 40px rgba(0, 206, 201, 0.25);
+        border-radius: 20px;
+        box-shadow: 0 10px 32px rgba(72, 59, 37, 0.12), 0 0 0 1px rgba(72, 59, 37, 0.1);
     }
 }
 
@@ -72,6 +63,51 @@ canvas#gameCanvas {
     width: 100%;
     height: 100%;
     display: block;
+}
+
+.challenge-hud {
+    --challenge-accent: #398979;
+    position: absolute;
+    top: max(102px, calc(env(safe-area-inset-top) + 88px));
+    left: 24px;
+    right: 24px;
+    max-width: 370px;
+    margin-inline: auto;
+    z-index: 25;
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 12px 14px 11px;
+    border: 1px solid rgba(255, 255, 255, .75);
+    border-left: 4px solid var(--challenge-accent);
+    border-radius: 5px 18px 18px 5px;
+    background: rgba(255, 249, 235, .94);
+    color: #384d43;
+    box-shadow: 0 5px 14px rgba(48, 53, 41, .12);
+    pointer-events: none;
+}
+.challenge-hud[hidden] { display: none; }
+.skin-grid[hidden] { display: none; }
+.wing-skin-card { font: inherit; color: #384d43; cursor: pointer; }
+.wing-skin-card > span { display: block; }
+.wing-skin-card:focus-visible { outline: 3px solid #398979; outline-offset: 3px; }
+.challenge-hud[data-theme="tea"] { --challenge-accent: #af7955; }
+.challenge-hud[data-theme="pond"] { --challenge-accent: #b07165; }
+.challenge-hud[data-theme="laundry"] { --challenge-accent: #898193; }
+.challenge-icon { width: 25px; padding-top: 2px; font-size: 23px; line-height: 1; }
+.challenge-copy { flex: 1; min-width: 0; }
+.challenge-heading { display: flex; justify-content: space-between; gap: 8px; align-items: baseline; }
+.challenge-heading strong { font-size: 15px; letter-spacing: .03em; }
+.challenge-heading > span { color: var(--challenge-accent); font-size: 14px; font-weight: 800; white-space: nowrap; }
+.challenge-copy p { margin-top: 4px; font-size: 12px; line-height: 1.4; }
+.challenge-feedback { display: block; margin-top: 3px; color: var(--challenge-accent); font-size: 11px; line-height: 1.4; }
+.challenge-progress { height: 3px; margin-top: 7px; border-radius: 2px; overflow: hidden; background: #e6e3d6; }
+.challenge-progress i { display: block; width: 100%; height: 100%; background: var(--challenge-accent); transform-origin: left; }
+.challenge-hud[data-complete="true"] .challenge-icon { color: #478666; }
+@media (max-width: 350px) {
+    .challenge-hud { left: 14px; right: 14px; padding: 10px; gap: 7px; }
+    .challenge-heading strong { font-size: 14px; }
+    .challenge-copy p { font-size: 11px; }
 }
 
 /* ================= 顶部 HUD 界面 (对标图 1:1) ================= */
@@ -404,10 +440,8 @@ canvas#gameCanvas {
     top: 50%;
     transform: translateY(-50%);
     width: 220px;
-    background: rgba(26, 34, 48, 0.85);
-    border: 1px solid rgba(255, 255, 255, 0.15);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
+    background: #faf8f2;
+    border: 1px solid #dedbd1;
     padding: 20px;
     border-radius: 18px;
     z-index: 20;
@@ -422,7 +456,7 @@ canvas#gameCanvas {
 .guide-title {
     font-size: 16px;
     font-weight: 800;
-    color: var(--primary);
+    color: #2f605e;
     margin-bottom: 14px;
     display: flex;
     align-items: center;
@@ -435,24 +469,24 @@ canvas#gameCanvas {
     justify-content: space-between;
     margin-bottom: 10px;
     font-size: 13px;
-    color: #d2dae2;
+    color: #4a554e;
 }
 
 .key-tag {
-    background: rgba(255, 255, 255, 0.15);
+    background: #efede5;
     padding: 3px 8px;
     border-radius: 6px;
     font-weight: bold;
-    color: #ffffff;
-    border: 1px solid rgba(255, 255, 255, 0.25);
+    color: #3a453f;
+    border: 1px solid #d8d7cd;
 }
 
 .guide-tips {
     margin-top: 14px;
     padding-top: 12px;
-    border-top: 1px dashed rgba(255, 255, 255, 0.15);
+    border-top: 1px dashed #d7d4c9;
     font-size: 12px;
-    color: #808e9b;
+    color: #6d756c;
     line-height: 1.5;
 }
 
@@ -933,88 +967,181 @@ canvas#gameCanvas {
     transform: scale(0.96);
 }
 
-/* 地图列表卡片 */
+/* 地图选择：浅色面板与每个世界的微缩插画 */
+#mapModal {
+    padding: 18px;
+    background: rgba(43, 40, 34, 0.56);
+}
+
+.map-selection-card {
+    display: flex;
+    flex-direction: column;
+    max-height: calc(100% - 20px);
+    padding: 22px 18px 18px;
+    background: #faf7ef;
+    color: #30382f;
+    border: 1px solid #e5dfd2;
+    box-shadow: 0 14px 40px rgba(38, 31, 21, 0.2);
+    text-align: left;
+}
+
+.map-selection-card .modal-header {
+    flex-shrink: 0;
+    margin-bottom: 4px;
+    gap: 10px;
+}
+
+.map-selection-card .modal-title {
+    margin: 0;
+    font-size: 21px;
+    color: #30382f;
+    letter-spacing: -0.4px;
+}
+
+.map-selection-card .modal-desc {
+    flex-shrink: 0;
+    margin: 4px 0 14px;
+    color: #77786d;
+    font-size: 12px;
+}
+
+.map-selection-card .btn-close-modal {
+    flex-shrink: 0;
+    background: #ece8dd;
+    color: #6a6d60;
+}
+
 .map-list {
     display: flex;
     flex-direction: column;
-    gap: 12px;
-    margin-top: 14px;
-    max-height: 380px;
+    gap: 9px;
+    min-height: 0;
+    margin: 0;
     overflow-y: auto;
+    overscroll-behavior: contain;
+    touch-action: pan-y;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: thin;
+    scrollbar-color: #c8c4b8 transparent;
 }
 
 .map-card-item {
-    background: rgba(255, 255, 255, 0.08);
-    border: 1.5px solid rgba(255, 255, 255, 0.15);
-    border-radius: 16px;
-    padding: 12px 14px;
-    display: flex;
-    justify-content: space-between;
+    --map-color: #567d52;
+    flex-shrink: 0;
+    display: grid;
+    grid-template-columns: 76px minmax(0, 1fr);
     align-items: center;
+    gap: 12px;
+    width: 100%;
+    padding: 11px;
+    background: #fffdf8;
+    border: 1.5px solid #e5e0d4;
+    border-radius: 15px;
+    font-family: inherit;
+    text-align: left;
     cursor: pointer;
-    transition: all 0.2s ease;
+    transition: background 0.15s ease, border-color 0.15s ease;
 }
 
 .map-card-item.active {
-    background: rgba(243, 156, 18, 0.18);
-    border-color: #f39c12;
-    box-shadow: 0 4px 15px rgba(243, 156, 18, 0.25);
+    background: #f0f1e8;
+    border-color: var(--map-color);
 }
 
 .map-card-item.locked {
-    opacity: 0.65;
-    cursor: not-allowed;
+    opacity: 0.6;
+    cursor: default;
     border-style: dashed;
 }
 
 .map-card-item:hover:not(.locked) {
-    transform: translateY(-2px);
-    background: rgba(255, 255, 255, 0.14);
+    border-color: var(--map-color);
+    background: #f1eee5;
 }
 
-.map-item-left {
+.map-card-item:focus-visible {
+    outline: 2px solid var(--map-color);
+    outline-offset: -4px;
+}
+
+.map-item-preview {
     display: flex;
     align-items: center;
-    gap: 12px;
+    justify-content: center;
+    width: 76px;
+    height: 76px;
+    overflow: hidden;
+    border-radius: 10px;
+    background: #eceadf;
+    font-size: 30px;
 }
 
-.map-item-icon {
-    font-size: 28px;
+.map-item-preview svg {
+    display: block;
+    width: 100%;
+    height: 100%;
+}
+
+.map-item-heading {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 4px;
 }
 
 .map-item-info {
     display: flex;
     flex-direction: column;
     text-align: left;
+    min-width: 0;
 }
 
 .map-item-name {
-    font-size: 15px;
+    font-size: 14px;
     font-weight: 800;
-    color: #ffffff;
+    color: #343b32;
+}
+
+.map-item-tag {
+    margin-top: 3px;
+    font-size: 10px;
+    font-weight: 700;
+    color: var(--map-color);
 }
 
 .map-item-desc {
     font-size: 11px;
-    color: #a4b0be;
-    margin-top: 2px;
+    color: #74776b;
+    line-height: 1.5;
+    margin-top: 5px;
 }
 
 .map-item-badge {
-    font-size: 11px;
+    flex-shrink: 0;
+    font-size: 9px;
     font-weight: 800;
-    padding: 4px 10px;
-    border-radius: 10px;
+    padding: 3px 6px;
+    border-radius: 6px;
+    background: #efeee5;
+    color: #74776b;
 }
 
 .map-item-badge.active-badge {
-    background: #f39c12;
-    color: #111;
+    background: var(--map-color);
+    color: #fff;
 }
 
 .map-item-badge.lock-badge {
-    background: rgba(255, 255, 255, 0.15);
-    color: #d2dae2;
+    background: #ebe8e1;
+    color: #74776b;
+}
+
+@media (max-width: 360px) {
+    #mapModal { padding: 12px; }
+    .map-selection-card { padding: 18px 12px 12px; }
+    .map-card-item { grid-template-columns: 60px minmax(0, 1fr); gap: 9px; }
+    .map-item-preview { width: 60px; height: 68px; }
+    .map-item-name { font-size: 13px; }
 }
 
 /* 衣橱装扮网格 */
@@ -1115,5 +1242,519 @@ canvas#gameCanvas {
     font-size: 20px;
     font-weight: 900;
     color: #fffa65;
+}
+
+/* 奶蛙主页与试衣间：奶油纸感、鼠尾草与暖金色。 */
+.lobby-overlay {
+    padding: max(16px, env(safe-area-inset-top)) 16px max(18px, env(safe-area-inset-bottom));
+    transition: opacity .35s cubic-bezier(.32,.72,0,1), transform .35s cubic-bezier(.32,.72,0,1);
+}
+.lobby-top-bar { align-items: flex-start; gap: 12px; }
+.lobby-stat {
+    padding: 7px 13px 7px 8px;
+    min-width: 126px;
+    max-width: calc(50% - 6px);
+    gap: 8px;
+    border-radius: 21px;
+    background: rgba(255,249,235,.95);
+    border: 1px solid rgba(255,255,255,.9);
+    box-shadow: 0 6px 20px rgba(75,66,39,.09), inset 0 0 0 3px rgba(198,178,140,.13);
+    color: #3b5145;
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+}
+.lobby-stat .pill-icon { width: 31px; height: 31px; flex-shrink: 0; }
+.lobby-stat .pill-icon svg { display: block; width: 100%; height: 100%; }
+.lobby-stat-copy { display: flex; flex-direction: column; min-width: 0; gap: 1px; }
+.lobby-stat-label { font-size: 10px; color: #7e816c; font-weight: 600; letter-spacing: .06em; }
+.lobby-stat .pill-text { font-size: 19px; line-height: 1.2; font-weight: 800; font-variant-numeric: tabular-nums; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.lobby-best { margin-left: auto; }
+.lobby-sound {
+    position: absolute;
+    top: max(26px, calc(env(safe-area-inset-top) + 10px));
+    right: auto;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 32px;
+    height: 32px;
+    pointer-events: auto;
+    background: rgba(255,249,235,.94);
+    border: 1px solid rgba(255,255,255,.75);
+    color: #4a6655;
+    box-shadow: 0 4px 12px rgba(75,66,39,.08);
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+    transition: transform .25s cubic-bezier(.32,.72,0,1);
+}
+.lobby-center-area { padding-top: 27px; }
+.speech-bubble {
+    max-width: min(270px, calc(100% - 24px));
+    margin-right: 0;
+    background: #fffaf0;
+    color: #405344;
+    border: 1px solid rgba(255,255,255,.9);
+    box-shadow: 0 6px 18px rgba(75,66,39,.12);
+    animation-timing-function: cubic-bezier(.45,0,.55,1);
+}
+.bubble-arrow { border-top-color: #fffaf0; }
+.lobby-side-dock { right: 16px; top: max(132px, calc(env(safe-area-inset-top) + 116px)); gap: 9px; }
+.dock-btn {
+    width: 42px;
+    min-height: 51px;
+    padding: 6px 2px 5px;
+    background: rgba(255,249,235,.95);
+    border: 1px solid rgba(255,255,255,.8);
+    color: #465e4e;
+    border-radius: 15px;
+    box-shadow: 0 4px 12px rgba(75,66,39,.08), inset 0 0 0 2px rgba(198,178,140,.1);
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+    transition: transform .25s cubic-bezier(.32,.72,0,1), background .25s cubic-bezier(.32,.72,0,1);
+}
+.dock-icon { display: block; width: 25px; height: 25px; line-height: 25px; font-size: 20px; }
+.dock-icon svg { display: block; width: 100%; height: 100%; }
+.dock-title { font-size: 10px; color: #465e4e; font-weight: 700; }
+.dock-tag { max-width: 48px; white-space: nowrap; text-overflow: ellipsis; overflow: hidden; box-shadow: 0 2px 4px rgba(75,66,39,.08); }
+.lobby-map-card {
+    background: rgba(255,249,235,.96);
+    border-color: rgba(255,255,255,.8);
+    box-shadow: 0 4px 16px rgba(75,66,39,.09), inset 0 0 0 3px rgba(198,178,140,.1);
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+    min-height: 45px;
+    padding: 7px 10px 7px 12px;
+}
+.map-card-left { min-width: 0; flex-wrap: wrap; gap: 3px 8px; }
+.map-flag { color: #94927c; font-size: 9px; }
+.map-title-lobby { color: #526849; font-size: 12px; }
+.btn-change-map {
+    color: #4c6653;
+    background: #ececdd;
+    border: 1px solid rgba(255,255,255,.9);
+    flex-shrink: 0;
+    min-height: 29px;
+    padding: 5px 9px;
+    border-radius: 11px;
+    transition: transform .25s cubic-bezier(.32,.72,0,1), background .25s cubic-bezier(.32,.72,0,1);
+}
+.btn-start-run {
+    background: #d78362;
+    box-shadow: 0 8px 22px rgba(116,74,50,.12), inset 0 1px 0 rgba(255,255,255,.24);
+    border: 1px solid rgba(255,245,225,.5);
+    animation: none;
+    transition: transform .25s cubic-bezier(.32,.72,0,1);
+}
+.btn-start-run:hover { transform: translateY(-1px); }
+.btn-start-run:active { transform: scale(.98); }
+.touch-hint {
+    color: #f8efcd;
+    background: rgba(64,81,59,.66);
+    border-color: rgba(248,239,205,.25);
+    animation-timing-function: cubic-bezier(.45,0,.55,1);
+}
+
+/* 试衣间的中段保持透明，让共用 WebGL 画布直接显示实时角色。 */
+.wardrobe-overlay {
+    padding: 0;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: stretch;
+    gap: 0;
+    background: transparent;
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+    color: #3c5346;
+}
+.wardrobe-header {
+    flex: 0 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: max(17px, env(safe-area-inset-top)) 23px 14px;
+    background: #f8f2e4;
+}
+.wardrobe-eyebrow { display: block; color: #8b8b72; font-size: 10px; font-weight: 600; letter-spacing: .12em; margin-bottom: 5px; }
+.wardrobe-header h2 { font-size: 24px; font-weight: 800; letter-spacing: .02em; color: #3c5346; }
+.wardrobe-header .btn-close-modal,
+.achievements-card .btn-close-modal {
+    width: 35px;
+    height: 35px;
+    flex: 0 0 35px;
+    border-radius: 50%;
+    background: #ecebdc;
+    border: 1px solid rgba(255,255,255,.7);
+    color: #64715c;
+    font-size: 16px;
+    transition: transform .25s cubic-bezier(.32,.72,0,1);
+}
+.wardrobe-preview {
+    flex: 1 1 auto;
+    min-height: 185px;
+    position: relative;
+    background: transparent;
+    overflow: hidden;
+    cursor: grab;
+    touch-action: none;
+    outline: none;
+}
+.wardrobe-preview:active { cursor: grabbing; }
+.wardrobe-preview:focus-visible { box-shadow: inset 0 0 0 2px #789883; }
+.wardrobe-preview-badge {
+    position: absolute;
+    left: 23px;
+    top: 12px;
+    padding: 5px 9px;
+    border-radius: 12px;
+    color: #93917c;
+    background: rgba(255,250,237,.85);
+    font-size: 10px;
+    letter-spacing: .06em;
+    pointer-events: none;
+}
+.wardrobe-preview-footer {
+    position: absolute;
+    bottom: 8px;
+    left: 0;
+    right: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    cursor: default;
+}
+.wardrobe-preview-footer > strong {
+    font-size: 17px;
+    letter-spacing: .04em;
+    color: #4b6050;
+    padding: 3px 12px;
+    border-radius: 12px;
+    background: rgba(248,242,228,.88);
+}
+.wardrobe-rotate-controls { display: flex; align-items: center; justify-content: center; gap: 8px; }
+.wardrobe-rotate-controls > span { font-size: 10px; color: #89917c; }
+.wardrobe-rotate-controls button {
+    width: 28px;
+    height: 28px;
+    background: #fdf9ec;
+    color: #658069;
+    border: 1px solid rgba(176,178,147,.22);
+    border-radius: 50%;
+    cursor: pointer;
+    font: inherit;
+    font-size: 17px;
+    transition: transform .25s cubic-bezier(.32,.72,0,1);
+}
+.wardrobe-rotate-controls #btnWardrobeReset { border-radius: 12px; width: 41px; font-size: 10px; }
+.wardrobe-rotate-controls button:active { transform: scale(.92); }
+.wardrobe-sheet {
+    flex: 0 0 auto;
+    padding: 16px 18px max(18px, env(safe-area-inset-bottom));
+    background: #fbf6e9;
+    border: 1px solid rgba(255,255,255,.9);
+    border-radius: 26px 26px 0 0;
+    box-shadow: 0 -5px 22px rgba(75,66,39,.06), inset 0 4px 0 rgba(216,209,186,.16);
+}
+.wardrobe-tabs {
+    display: flex;
+    gap: 4px;
+    padding: 4px;
+    border-radius: 16px;
+    background: #eaeade;
+    border: 1px solid rgba(255,255,255,.85);
+}
+.wardrobe-tabs button {
+    flex: 1;
+    border: none;
+    border-radius: 12px;
+    padding: 8px 10px;
+    background: transparent;
+    color: #8e9580;
+    font: inherit;
+    font-size: 13px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: color .25s cubic-bezier(.32,.72,0,1), background .25s cubic-bezier(.32,.72,0,1), transform .25s cubic-bezier(.32,.72,0,1);
+}
+.wardrobe-tabs button.active { background: #fffaf0; color: #47634f; box-shadow: 0 3px 7px rgba(75,66,39,.05); }
+.wardrobe-tabs button:active { transform: scale(.97); }
+.wardrobe-skin-list {
+    display: flex;
+    gap: 9px;
+    margin-top: 14px;
+    padding: 0 0 6px;
+    overflow-x: auto;
+    overflow-y: hidden;
+    scroll-snap-type: x proximity;
+    scrollbar-width: thin;
+    scrollbar-color: #cbd0b7 transparent;
+    touch-action: pan-x;
+    -webkit-overflow-scrolling: touch;
+}
+.wardrobe-skin-list[hidden] { display: none; }
+.wardrobe-skin-list .skin-card {
+    position: relative;
+    flex: 0 0 95px;
+    min-height: 125px;
+    padding: 6px 5px 8px;
+    gap: 3px;
+    background: #f1eee0;
+    border: 1px solid rgba(198,190,163,.24);
+    box-shadow: inset 0 0 0 3px rgba(255,255,255,.5);
+    border-radius: 16px;
+    cursor: pointer;
+    scroll-snap-align: start;
+    font: inherit;
+    transition: transform .3s cubic-bezier(.32,.72,0,1), background .3s cubic-bezier(.32,.72,0,1), border-color .3s cubic-bezier(.32,.72,0,1);
+}
+.wardrobe-skin-list .skin-card.active { background: #e6eddc; border-color: #92a884; box-shadow: inset 0 0 0 3px rgba(255,255,255,.6); }
+.wardrobe-skin-list .skin-card:active { transform: scale(.96); }
+.wardrobe-skin-list .skin-card:focus-visible,
+.wardrobe-tabs button:focus-visible,
+.wardrobe-equip:focus-visible { outline: 2px solid #6b926f; outline-offset: 2px; }
+.skin-illustration { display: block; width: 61px; height: 63px; }
+.skin-illustration svg { display: block; width: 100%; height: 100%; }
+.wardrobe-skin-list .skin-name { color: #4d6350; font-size: 10px; line-height: 1.4; white-space: nowrap; }
+.wardrobe-skin-list .skin-tag { color: #969680; font-size: 9px; line-height: 1.4; }
+.wardrobe-skin-list .skin-card.active .skin-tag { color: #6a875e; }
+.wardrobe-skin-list .skin-card.equipped::after {
+    content: '✓';
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    width: 15px;
+    height: 15px;
+    border-radius: 50%;
+    background: #94a97e;
+    color: #fffbee;
+    font-size: 9px;
+    line-height: 15px;
+}
+.wardrobe-section-note { margin: 5px 0 12px; color: #96947f; font-size: 10px; text-align: center; line-height: 1.4; }
+.wardrobe-equip {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    border: 1px solid rgba(255,255,255,.45);
+    border-radius: 23px;
+    padding: 6px 7px 6px 20px;
+    min-height: 45px;
+    background: #789273;
+    box-shadow: 0 4px 10px rgba(76,101,63,.08), inset 0 1px 0 rgba(255,255,255,.2);
+    color: #fffbee;
+    font: inherit;
+    font-size: 14px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: transform .25s cubic-bezier(.32,.72,0,1), background .25s cubic-bezier(.32,.72,0,1);
+}
+.wardrobe-equip i { display: grid; place-items: center; width: 31px; height: 31px; background: rgba(248,251,231,.15); border-radius: 50%; font-style: normal; }
+.wardrobe-equip:active { transform: scale(.98); }
+.wardrobe-equip:disabled { background: #dce3cf; color: #91a083; cursor: default; box-shadow: none; }
+
+/* 成就只展示真实累计记录。 */
+#achievementsModal { background: rgba(51,64,48,.35); backdrop-filter: blur(7px); -webkit-backdrop-filter: blur(7px); padding: 19px; }
+.achievements-card {
+    padding: 5px;
+    border-radius: 28px;
+    background: #e8e5d7;
+    border: 1px solid rgba(255,255,255,.65);
+    box-shadow: 0 16px 38px rgba(51,64,48,.14);
+    color: #415b49;
+    text-align: left;
+    max-height: calc(100% - 24px);
+    overflow-y: auto;
+    animation: wardrobeCardIn .45s cubic-bezier(.32,.72,0,1);
+}
+.achievements-inner { background: #fcf7e9; padding: 20px 18px 16px; border-radius: 23px; box-shadow: inset 0 1px 0 rgba(255,255,255,.95); }
+.achievements-card .modal-header { align-items: center; margin-bottom: 0; }
+.achievements-card .modal-title { font-size: 25px; color: #3f5947; margin: 0; }
+.achievements-intro { color: #94927e; font-size: 11px; margin: 10px 0 17px; }
+.achievement-records { display: grid; grid-template-columns: minmax(0,1fr) minmax(0,1fr); gap: 10px; }
+.achievement-record {
+    position: relative;
+    padding: 13px 10px 12px;
+    background: #eeeede;
+    box-shadow: inset 0 0 0 3px rgba(255,255,255,.45);
+    border: 1px solid rgba(186,188,160,.16);
+    border-radius: 17px;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 2px 4px;
+    min-width: 0;
+}
+.achievement-distance { background: #e6eddc; }
+.achievement-coins { background: #f4ead0; }
+.achievement-symbol { display: grid; place-items: center; width: 28px; height: 28px; border-radius: 10px; background: rgba(255,255,255,.6); color: #86996b; font-size: 20px; margin-bottom: 9px; }
+.achievement-coins .achievement-symbol { color: #c4a45b; }
+.achievement-label { flex: 0 0 100%; color: #858e75; font-size: 10px; margin-bottom: 3px; }
+.achievement-record strong { color: #435d48; font-size: clamp(19px,6vw,26px); font-variant-numeric: tabular-nums; line-height: 1.25; overflow-wrap: anywhere; min-width: 0; }
+.achievement-unit { font-size: 10px; color: #969a84; }
+.achievements-note { color: #a3a08a; font-size: 10px; line-height: 1.6; margin-top: 17px; }
+@keyframes wardrobeCardIn { from { opacity: 0; transform: translateY(14px) scale(.98); } to { opacity: 1; transform: translateY(0) scale(1); } }
+@media (max-width: 350px) {
+    .lobby-overlay { padding-left: 12px; padding-right: 12px; }
+    .lobby-stat { min-width: 116px; padding: 7px 10px 7px 7px; gap: 6px; }
+    .lobby-stat .pill-text { font-size: 17px; }
+    .lobby-side-dock { right: 12px; }
+    .wardrobe-header { padding-left: 18px; padding-right: 18px; }
+    .wardrobe-sheet { padding-left: 13px; padding-right: 13px; }
+    .wardrobe-skin-list .skin-card { flex-basis: 88px; }
+    .achievements-inner { padding: 17px 13px; }
+    .achievement-record { padding: 12px 8px; }
+}
+@media (max-height: 690px) {
+    .wardrobe-header { padding-top: 12px; padding-bottom: 10px; }
+    .wardrobe-header h2 { font-size: 21px; }
+    .wardrobe-sheet { padding-top: 12px; padding-bottom: 12px; }
+    .wardrobe-skin-list { margin-top: 10px; }
+    .wardrobe-skin-list .skin-card { min-height: 107px; padding: 4px 5px 6px; }
+    .skin-illustration { width: 49px; height: 50px; }
+    .wardrobe-preview { min-height: 155px; }
+    .wardrobe-section-note { margin-bottom: 8px; }
+    .lobby-side-dock { gap: 7px; }
+    .dock-btn { min-height: 47px; }
+}
+@media (prefers-reduced-motion: reduce) {
+    .speech-bubble, .touch-hint, .achievements-card { animation: none; }
+    .wardrobe-tabs button, .wardrobe-equip, .wardrobe-skin-list .skin-card { transition: none; }
+}
+
+/* 功能入口放到起跑按钮下，让奶蛙两侧完整露出。 */
+.lobby-footer { gap: 8px; }
+.lobby-map-card {
+    width: auto;
+    max-width: 100%;
+    min-height: 27px;
+    padding: 3px 5px 3px 11px;
+    border-radius: 15px;
+    box-shadow: inset 0 0 0 2px rgba(198,178,140,.08);
+}
+.lobby-map-card .map-card-left { flex-wrap: nowrap; gap: 6px; }
+.lobby-map-card .map-flag { font-size: 9px; white-space: nowrap; }
+.lobby-map-card .map-title-lobby { font-size: 10px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.lobby-map-card .btn-change-map { min-height: 21px; padding: 2px 7px; font-size: 9px; margin-left: 6px; }
+.lobby-footer .btn-start-run { padding: 11px 14px 10px; border-radius: 21px; }
+.lobby-footer .btn-run-text { font-size: 23px; }
+.lobby-footer .btn-run-icon { font-size: 20px; }
+.lobby-footer .btn-run-sub { font-size: 10px; font-weight: 500; }
+.lobby-bottom-dock {
+    display: grid;
+    grid-template-columns: repeat(5, minmax(0,1fr));
+    gap: 4px;
+    width: 100%;
+    padding: 3px 6px;
+    border-radius: 19px;
+    background: rgba(255,249,235,.96);
+    border: 1px solid rgba(255,255,255,.82);
+    box-shadow: 0 4px 14px rgba(75,66,39,.08), inset 0 0 0 3px rgba(198,178,140,.1);
+    pointer-events: auto;
+}
+.lobby-bottom-dock .dock-btn { width: 100%; min-height: 51px; padding: 4px 0 3px; background: transparent; border: none; box-shadow: none; border-radius: 12px; gap: 1px; }
+.lobby-bottom-dock .dock-btn:hover { background: #eeeddf; }
+.lobby-bottom-dock .dock-btn:focus-visible { outline: 2px solid #739377; outline-offset: -2px; }
+.lobby-bottom-dock .dock-icon { width: 24px; height: 24px; }
+.lobby-bottom-dock .dock-title { font-size: 10px; font-weight: 600; }
+.lobby-bottom-dock .dock-dot { top: 6px; right: calc(50% - 14px); width: 6px; height: 6px; background: #cf896e; box-shadow: none; }
+.lobby-sound:active { transform: translateX(-50%) scale(.92); }
+
+/* 衣服分类与翻页辅助，不占用角色的旋转区域。 */
+.outfit-browser { display: flex; align-items: center; gap: 7px; margin-top: 10px; min-height: 30px; }
+.outfit-browser[hidden] { display: none; }
+.outfit-filters { display: flex; align-items: center; gap: 3px; }
+.outfit-filters button { padding: 5px 8px; border-radius: 10px; border: none; background: transparent; color: #a2a28b; font: inherit; font-size: 10px; cursor: pointer; transition: color .25s cubic-bezier(.32,.72,0,1), background .25s cubic-bezier(.32,.72,0,1); }
+.outfit-filters button.active { color: #587252; background: #e7ecd9; }
+.outfit-filters button:focus-visible { outline: 2px solid #739377; outline-offset: 1px; }
+.outfit-count { margin-left: auto; font-size: 9px; color: #a29f88; white-space: nowrap; }
+.outfit-browse-arrows { display: flex; gap: 3px; }
+.outfit-browse-arrows button { width: 25px; height: 28px; border: 1px solid rgba(194,198,167,.25); border-radius: 9px; background: #f6f4e5; color: #75906e; font: inherit; font-size: 23px; line-height: 1; cursor: pointer; }
+.outfit-browse-arrows button:disabled { color: #c5c7b5; cursor: default; }
+.outfit-browse-arrows button:focus-visible { outline: 2px solid #739377; outline-offset: 1px; }
+.outfit-browser + .wardrobe-skin-list { margin-top: 7px; }
+.wardrobe-section-note { white-space: nowrap; text-overflow: ellipsis; overflow: hidden; }
+
+/* 本人的每局成绩，透明呈现来源、金币、地图与完成时间。 */
+#rankModal { padding: 19px; background: rgba(51,64,48,.35); backdrop-filter: blur(7px); -webkit-backdrop-filter: blur(7px); }
+.personal-rank-card { max-width: 385px; width: 100%; max-height: min(650px, calc(100% - 10px)); padding: 5px; border-radius: 27px; border: 1px solid rgba(255,255,255,.7); background: #e8e5d7; box-shadow: 0 16px 38px rgba(51,64,48,.14); text-align: left; color: #405b48; overflow: hidden; }
+.personal-rank-inner { display: flex; flex-direction: column; max-height: min(638px, calc(100dvh - 60px)); padding: 20px 17px 14px; border-radius: 22px; background: #fcf7e9; box-shadow: inset 0 1px 0 rgba(255,255,255,.95); }
+.personal-rank-card .modal-header { flex: 0 0 auto; align-items: center; margin-bottom: 14px; }
+.personal-rank-card .modal-title { font-size: 25px; color: #3f5947; margin: 0; }
+.personal-rank-card .btn-close-modal { width: 35px; height: 35px; flex: 0 0 35px; border-radius: 50%; background: #ecebdc; border: 1px solid rgba(255,255,255,.7); color: #64715c; font-size: 16px; }
+.personal-rank-summary { display: grid; grid-template-columns: 1.35fr 1fr; gap: 9px; flex: 0 0 auto; }
+.personal-rank-summary > div { display: flex; flex-direction: column; gap: 4px; padding: 12px 13px; border-radius: 15px; background: #e8eedc; border: 1px solid rgba(189,195,156,.18); box-shadow: inset 0 0 0 3px rgba(255,255,255,.4); }
+.personal-rank-summary > div + div { background: #efeede; }
+.personal-rank-summary span { font-size: 10px; color: #8b947d; }
+.personal-rank-summary strong { font-size: 20px; color: #4a644a; font-variant-numeric: tabular-nums; overflow-wrap: anywhere; }
+.personal-rank-caption { flex: 0 0 auto; margin: 13px 0 7px; color: #a5a18a; font-size: 9px; }
+.personal-rank-list { min-height: 0; overflow-y: auto; overflow-x: hidden; overscroll-behavior: contain; touch-action: pan-y; -webkit-overflow-scrolling: touch; scrollbar-width: thin; scrollbar-color: #cbd0b7 transparent; list-style: none; padding-right: 2px; }
+.personal-rank-item { display: flex; align-items: center; gap: 10px; padding: 12px 0; border-bottom: 1px solid rgba(189,190,163,.18); }
+.personal-rank-item:last-child { border-bottom: none; }
+.personal-rank-position { flex: 0 0 27px; text-align: center; font-size: 15px; color: #b2b297; font-variant-numeric: tabular-nums; }
+.personal-rank-item:first-child .personal-rank-position { color: #b59a54; font-weight: 800; }
+.personal-rank-body { flex: 1; min-width: 0; }
+.personal-rank-headline { display: flex; align-items: center; justify-content: space-between; gap: 6px; }
+.personal-rank-headline strong { color: #46634d; font-size: 17px; font-variant-numeric: tabular-nums; }
+.personal-rank-coins { font-size: 10px; color: #ae965d; white-space: nowrap; }
+.personal-rank-details { display: flex; align-items: baseline; justify-content: space-between; gap: 5px; color: #9e9e86; font-size: 9px; line-height: 1.4; margin-top: 4px; }
+.personal-rank-details > span { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.personal-rank-details time { flex-shrink: 0; font-variant-numeric: tabular-nums; }
+.personal-rank-item.legacy .personal-rank-details { color: #a89462; }
+.personal-rank-empty { padding: 35px 13px 30px; text-align: center; display: flex; align-items: center; flex-direction: column; gap: 12px; }
+.personal-rank-empty > span { display: grid; place-items: center; width: 43px; height: 43px; border-radius: 16px; background: #e8edda; color: #92a37a; font-size: 25px; }
+.personal-rank-empty > strong { font-size: 15px; color: #687e5f; }
+.personal-rank-empty p { color: #a6a18c; font-size: 11px; line-height: 1.7; max-width: 230px; }
+@media (max-width: 350px) {
+    .lobby-footer { gap: 7px; }
+    .lobby-footer .btn-run-text { font-size: 21px; }
+    .lobby-footer .btn-run-sub { font-size: 9px; }
+    .lobby-map-card .map-title-lobby { max-width: 150px; }
+    .personal-rank-inner { padding-left: 12px; padding-right: 12px; }
+    .personal-rank-summary strong { font-size: 18px; }
+    .personal-rank-item { gap: 6px; }
+    .personal-rank-coins { font-size: 9px; }
+    .outfit-filters button { padding-inline: 7px; }
+    .outfit-browser { gap: 5px; }
+}
+@media (max-height: 690px) {
+    .lobby-overlay { padding-bottom: max(12px, env(safe-area-inset-bottom)); }
+    .lobby-bottom-dock .dock-btn { min-height: 47px; }
+    .lobby-bottom-dock .dock-icon { width: 22px; height: 22px; }
+    .lobby-footer .btn-start-run { padding-top: 9px; padding-bottom: 8px; }
+    .outfit-browser { margin-top: 8px; min-height: 28px; }
+    .personal-rank-card .modal-title { font-size: 23px; }
+}
+
+/* 衣橱交易：未解锁仍能试穿，余额与价格保持清楚。 */
+.wardrobe-header-tools { display: flex; align-items: center; gap: 9px; }
+.wardrobe-wallet { display: flex; align-items: center; gap: 5px; padding: 6px 9px; border-radius: 14px; background: #eee9d4; border: 1px solid rgba(255,255,255,.7); color: #806f40; max-width: 109px; }
+.wardrobe-wallet > span { color: #c4a45f; font-size: 15px; }
+.wardrobe-wallet > strong { color: #84764c; font-size: 12px; font-weight: 700; font-variant-numeric: tabular-nums; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.wardrobe-skin-list .skin-card.locked { opacity: 1; }
+.skin-lock-badge { position: absolute; right: 6px; top: 6px; display: grid; place-items: center; width: 16px; height: 16px; border-radius: 6px; background: rgba(255,250,235,.92); color: #a99e7c; }
+.skin-lock-badge svg { display: block; width: 12px; height: 12px; }
+.wardrobe-skin-list .skin-tag.skin-price { color: #af9457; font-size: 10px; font-weight: 700; font-variant-numeric: tabular-nums; }
+.wardrobe-skin-list .skin-card.active .skin-tag.skin-price { color: #9a834e; }
+.wardrobe-equip.is-purchase { background: #b79b65; }
+.wardrobe-equip.is-purchase > span { font-size: 12px; }
+.wardrobe-equip.is-purchase.is-short { background: #eee8d5; color: #a29473; border-color: rgba(207,198,167,.35); }
+.wardrobe-equip.is-purchase.is-short i { background: #e3dcc5; }
+.wardrobe-purchase-message { color: #748c65; font-size: 10px; line-height: 1.4; text-align: center; margin: -4px 0 9px; }
+.wardrobe-purchase-message[hidden] { display: none; }
+.wardrobe-purchase-message[data-status="error"] { color: #b07761; }
+#dailyModal { padding: 20px; background: rgba(51,64,48,.35); backdrop-filter: blur(7px); -webkit-backdrop-filter: blur(7px); }
+#dailyModal .modal-card { background: #fcf7e9; border: 1px solid rgba(255,255,255,.85); box-shadow: 0 16px 38px rgba(51,64,48,.14), inset 0 0 0 5px #ebe7d8; color: #52694e; }
+#dailyModal .modal-title { color: #52694e; font-size: 22px; }
+#dailyModal .modal-desc { color: #96957c; font-size: 12px; }
+#dailyModal .btn-close-modal { background: #ecebdc; color: #64715c; border-color: rgba(255,255,255,.7); }
+#dailyModal .reward-box { background: #f4ead0; border: 1px solid rgba(220,201,154,.45); box-shadow: inset 0 0 0 3px rgba(255,255,255,.45); }
+#dailyModal .reward-num { color: #ae965b; }
+#dailyModal .modal-btn-start { background: #879d78; border-radius: 22px; box-shadow: 0 5px 12px rgba(76,101,63,.08); font-size: 15px; transition: transform .25s cubic-bezier(.32,.72,0,1); }
+#dailyModal .modal-btn-start:disabled { background: #e2e6d3; color: #9aa48d; box-shadow: none; cursor: default; }
+@media (max-width: 350px) {
+    .wardrobe-header-tools { gap: 6px; }
+    .wardrobe-wallet { padding: 5px 7px; max-width: 90px; }
+    .wardrobe-wallet > strong { font-size: 11px; }
+    .wardrobe-equip.is-purchase > span { font-size: 11px; }
 }
 

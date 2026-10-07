@@ -1,16 +1,22 @@
 ﻿/**
- * 奶蛙快跑 - 音频合成与魔性音效系统
- * 基于原生 Web Audio API，无需加载任何庞大外链音频文件即可实时发声！
- * 兼容标准浏览器与支持 WebAudio 的微端环境，并在微信/抖音小游戏提供无缝 fallback
+ * 奶蛙快跑 - 原创文件 BGM 与 Web Audio 合成音效。
+ * 浏览器直接播放本地媒体，微信/抖音使用原生播放器；文件失败时保留合成 BGM。
  */
 import { platform } from './adapter.js';
+
+export const BGM_ASSET_PATH = 'assets/audio/naiwa-sunny-run.mp3';
 
 export class AudioManager {
     constructor() {
         this.ctx = null;
         this.isMuted = platform.getStorage('naiwa_muted', false);
+        this.bgmRequested = false;
         this.bgmPlaying = false;
         this.bgmInterval = null;
+        this.bgmPlayer = null;
+        this.bgmPlayerKind = null;
+        this.bgmFileFailed = false;
+        this.bgmGeneration = 0;
         this.comboCount = 0;
         this.lastCoinTime = 0;
         this.initialized = false;
@@ -22,7 +28,7 @@ export class AudioManager {
     init() {
         if (this.initialized) return;
         try {
-            const AudioCtx = window.AudioContext || window.webkitAudioContext;
+            const AudioCtx = typeof window !== 'undefined' && (window.AudioContext || window.webkitAudioContext);
             if (AudioCtx) {
                 this.ctx = new AudioCtx();
                 this.initialized = true;
@@ -35,17 +41,19 @@ export class AudioManager {
     resume() {
         if (!this.initialized) this.init();
         if (this.ctx && this.ctx.state === 'suspended') {
-            this.ctx.resume();
+            // A blocked context may be resumed again by the next real user gesture.
+            try { this.ctx.resume()?.catch?.(() => {}); } catch (_) { /* Native contexts may already be closed. */ }
         }
+        if (this.canPlayBGM() && !this.bgmPlaying) this.playBGM();
     }
 
     toggleMute() {
         this.isMuted = !this.isMuted;
         platform.setStorage('naiwa_muted', this.isMuted);
         if (this.isMuted) {
-            this.stopBGM();
+            this.pauseBGM();
         } else {
-            this.startBGM();
+            this.resume();
         }
         return this.isMuted;
     }
@@ -293,12 +301,83 @@ export class AudioManager {
         });
     }
 
-    // ================= 欢快 8-Bit BGM 循环生成器 =================
+    // ================= 原创 BGM 与合成回退 =================
 
     startBGM() {
-        if (this.isMuted || this.bgmPlaying) return;
+        this.bgmRequested = true;
         this.resume();
-        if (!this.ctx) return;
+    }
+
+    canPlayBGM() {
+        return this.bgmRequested && !this.isMuted && !(typeof document !== 'undefined' && document.hidden);
+    }
+
+    createBGMPlayer() {
+        if (this.bgmPlayer || this.bgmFileFailed) return this.bgmPlayer;
+        try {
+            const nativeApi = platform.env === 'wechat' && typeof wx !== 'undefined' ? wx
+                : platform.env === 'douyin' && typeof tt !== 'undefined' ? tt : null;
+            if (nativeApi?.createInnerAudioContext) {
+                this.bgmPlayer = nativeApi.createInnerAudioContext();
+                this.bgmPlayerKind = 'native';
+                this.bgmPlayer.onError?.(error => this.failFileBGM(error));
+                this.bgmPlayer.src = BGM_ASSET_PATH;
+            } else if (platform.env === 'browser' && typeof window !== 'undefined' && typeof window.Audio === 'function') {
+                // Keep media separate from Web Audio: file:// fetch/XHR and media-source nodes can hit CORS.
+                this.bgmPlayer = new window.Audio(`./${BGM_ASSET_PATH}`);
+                this.bgmPlayerKind = 'browser';
+                this.bgmPlayer.preload = 'auto';
+                this.bgmPlayer.addEventListener('error', () => this.failFileBGM(this.bgmPlayer?.error));
+            } else {
+                this.bgmFileFailed = true;
+                return null;
+            }
+            this.bgmPlayer.loop = true;
+            this.bgmPlayer.autoplay = false;
+            this.bgmPlayer.volume = 0.34;
+            return this.bgmPlayer;
+        } catch (error) {
+            this.failFileBGM(error);
+            return null;
+        }
+    }
+
+    playBGM() {
+        if (!this.canPlayBGM() || this.bgmPlaying) return;
+        const player = this.createBGMPlayer();
+        if (!player || this.bgmFileFailed) {
+            this.startSynthBGM();
+            return;
+        }
+        const generation = ++this.bgmGeneration;
+        // Also covers a pending browser play(), so transition completion cannot create a second request.
+        this.bgmPlaying = true;
+        try {
+            const result = player.play();
+            result?.then?.(() => {
+                if (generation !== this.bgmGeneration || !this.canPlayBGM()) return;
+                this.bgmPlaying = true;
+            }).catch(error => {
+                if (generation !== this.bgmGeneration) return;
+                this.bgmPlaying = false;
+                if (error?.name === 'NotAllowedError' || error?.name === 'AbortError') return;
+                this.failFileBGM(error);
+            });
+        } catch (error) {
+            if (generation === this.bgmGeneration) this.failFileBGM(error);
+        }
+    }
+
+    failFileBGM(error) {
+        if (this.bgmFileFailed) return;
+        this.bgmFileFailed = true;
+        this.pauseBGM();
+        console.warn('File BGM unavailable; using synthesized music:', error);
+        if (this.canPlayBGM()) this.startSynthBGM();
+    }
+
+    startSynthBGM() {
+        if (!this.canPlayBGM() || this.bgmInterval !== null || !this.ctx) return;
 
         this.bgmPlaying = true;
         // 经典轻快跑酷旋律音符序列 (MIDI 频率)
@@ -309,7 +388,7 @@ export class AudioManager {
         let step = 0;
 
         this.bgmInterval = setInterval(() => {
-            if (this.isMuted || !this.bgmPlaying || !this.ctx) return;
+            if (!this.canPlayBGM() || !this.bgmPlaying || !this.ctx) return;
 
             const freq = notes[step % notes.length];
             const osc = this.ctx.createOscillator();
@@ -332,12 +411,27 @@ export class AudioManager {
         }, 180); // 约 166 BPM
     }
 
-    stopBGM() {
+    pauseBGM(reset = false) {
+        // Invalidate play() promises before pausing, which can reject those promises with AbortError.
+        this.bgmGeneration++;
         this.bgmPlaying = false;
-        if (this.bgmInterval) {
+        if (this.bgmInterval !== null) {
             clearInterval(this.bgmInterval);
             this.bgmInterval = null;
         }
+        if (!this.bgmPlayer) return;
+        try {
+            if (reset && this.bgmPlayerKind === 'native') this.bgmPlayer.stop();
+            else {
+                this.bgmPlayer.pause();
+                if (reset) this.bgmPlayer.currentTime = 0;
+            }
+        } catch (_) { /* Failed or not-yet-loaded media can reject pause/seek. */ }
+    }
+
+    stopBGM({ reset = false } = {}) {
+        this.bgmRequested = false;
+        this.pauseBGM(reset);
     }
 }
 

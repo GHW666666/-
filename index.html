@@ -3,14 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>奶蛙快跑！- 埃及·砂岩集市 3D跑酷大冲刺</title>
-    <meta name="description" content="全3D跑酷小游戏《奶蛙快跑》，3D奶龙模型、埃及砂岩集市、引桥车顶冲刺、爽快滑铲与变道。">
-    <link rel="stylesheet" href="style.css">
+    <title>奶蛙快跑！- 五个奇妙世界的 3D 跑酷</title>
+    <meta name="description" content="和奶蛙一起探索砂岩集市、巨物便利店、奶茶泡泡港、蛙塘音乐节与云端洗衣房，跳跃、滑铲、登高与收集星星。">
+    <link rel="stylesheet" href="style.css?v=ccea3c571c09">
 </head>
 <body>
-    <!-- 动感氛围光晕背景 -->
-    <div class="bg-ambient"></div>
-
     <div class="game-wrapper">
         <!-- 核心游戏画布与HUD容器 -->
         <main class="canvas-container" id="gameContainer">
@@ -54,6 +51,16 @@
                 </div>
             </div>
 
+            <div class="challenge-hud" id="challengeHud" hidden role="status" aria-live="polite">
+                <span class="challenge-icon" id="challengeIcon" aria-hidden="true">✦</span>
+                <div class="challenge-copy">
+                    <div class="challenge-heading"><strong id="challengeTitle"></strong><span id="challengeCount"></span></div>
+                    <p id="challengeInstruction"></p>
+                    <span class="challenge-feedback" id="challengeFeedback"></span>
+                    <div class="challenge-progress" aria-hidden="true"><i id="challengeProgress"></i></div>
+                </div>
+            </div>
+
             <!-- 左下：速度与屋顶冲刺仪表卡片 (游戏跑酷中显示) -->
             <div class="hud-speed-card" id="hudSpeed" style="display: none;">
                 <div class="speed-row">
@@ -89,30 +96,18 @@
 
             <!-- ================= 主页面 UI (奶龙正脸互动与未来玩法扩展) ================= -->
             <div class="lobby-overlay" id="lobbyOverlay">
-                <!-- 顶部状态栏：玩家信息、金币、历史最佳、音效开关 -->
+                <!-- 顶部状态栏：左侧金币，右侧最远距离 -->
                 <header class="lobby-top-bar">
-                    <div class="player-profile">
-                        <div class="avatar-box">🦖</div>
-                        <div class="player-meta">
-                            <span class="player-name">奶龙大队长</span>
-                            <span class="player-badge">Lv.3 跑酷萌新</span>
-                        </div>
+                    <div class="lobby-pill lobby-stat" id="lobbyCoinsPill" title="可用金币">
+                        <span class="pill-icon" aria-hidden="true"><svg viewBox="0 0 32 32" fill="none"><circle cx="16" cy="16" r="12" fill="#f2c764"/><circle cx="16" cy="16" r="8.5" stroke="#bd8b3c" stroke-width="1.3"/><path d="m16 10 1.8 3.8 4.2.6-3 3 .7 4.1-3.7-2-3.7 2 .7-4.1-3-3 4.2-.6Z" fill="#fff3c1"/></svg></span>
+                        <span class="lobby-stat-copy"><span class="lobby-stat-label">金币</span><strong class="pill-text" id="lobbyCoins">0</strong></span>
                     </div>
-
-                    <div class="lobby-top-right">
-                        <div class="lobby-pill" id="lobbyCoinsPill" title="当前金币">
-                            <span class="pill-icon">⭐</span>
-                            <span class="pill-text" id="lobbyCoins">0</span>
-                        </div>
-                        <div class="lobby-pill" id="lobbyRankPill" title="历史最佳成绩">
-                            <span class="pill-icon">🏆</span>
-                            <span class="pill-text" id="lobbyHighScore">0m</span>
-                        </div>
-                        <button class="btn-icon-lobby" id="btnMute" aria-label="声音开关" title="声音开关">
-                            <span id="muteIcon">🔊</span>
-                        </button>
+                    <div class="lobby-pill lobby-stat lobby-best" id="lobbyRankPill" title="历史最远距离">
+                        <span class="pill-icon" aria-hidden="true"><svg viewBox="0 0 32 32" fill="none"><path d="M10 6h12v7c0 4-2 7-6 7s-6-3-6-7V6Z" fill="#d79b5c"/><path d="M10 8H6v4c0 3 2 5 5 5M22 8h4v4c0 3-2 5-5 5M16 20v5M11 26h10" stroke="#d79b5c" stroke-width="1.5" stroke-linecap="round"/><path d="m16 9 1.1 2.2 2.5.4-1.8 1.7.4 2.5-2.2-1.2-2.2 1.2.4-2.5-1.8-1.7 2.5-.4Z" fill="#fff2d7"/></svg></span>
+                        <span class="lobby-stat-copy"><span class="lobby-stat-label">最远距离</span><strong class="pill-text" id="lobbyHighScore">0m</strong></span>
                     </div>
                 </header>
+                <button class="btn-icon-lobby lobby-sound" id="btnMute" aria-label="声音开关" title="声音开关"><span id="muteIcon">🔊</span></button>
 
                 <!-- 中间奶龙互动区：气泡对话框 + 触摸热区 + 飘心特效容器 -->
                 <div class="lobby-center-area">
@@ -131,37 +126,15 @@
                     <div class="reaction-container" id="reactionContainer"></div>
                 </div>
 
-                <!-- 右侧玩法拓展快捷菜单 (未来更多玩法预留) -->
-                <aside class="lobby-side-dock">
-                    <button class="dock-btn" id="btnOpenMaps" title="地图漫游">
-                        <span class="dock-icon">🗺️</span>
-                        <span class="dock-title">地图</span>
-                        <span class="dock-tag">埃及</span>
-                    </button>
-                    <button class="dock-btn" id="btnOpenWardrobe" title="奶龙衣橱">
-                        <span class="dock-icon">🎒</span>
-                        <span class="dock-title">衣橱</span>
-                        <span class="dock-tag new-tag">NEW</span>
-                    </button>
-                    <button class="dock-btn" id="btnOpenRank" title="荣誉天梯">
-                        <span class="dock-icon">🏆</span>
-                        <span class="dock-title">排行</span>
-                    </button>
-                    <button class="dock-btn" id="btnOpenDaily" title="每日补给">
-                        <span class="dock-icon">🎁</span>
-                        <span class="dock-title">补给</span>
-                        <span class="dock-dot"></span>
-                    </button>
-                </aside>
-
                 <!-- 底部主操作区：当前地图指示卡 + 醒目大号开始跑酷按钮 -->
                 <footer class="lobby-footer">
                     <div class="lobby-map-card" id="lobbyMapCard">
                         <div class="map-card-left">
-                            <span class="map-flag">📍 当前地图</span>
+                            <span class="map-flag">当前世界</span>
                             <span class="map-title-lobby" id="lobbyMapTitle">埃及·砂岩集市 🏛️</span>
+                            <span id="lobbyMapTag" hidden>埃及</span>
                         </div>
-                        <button class="btn-change-map" id="btnChangeMap">切换地图 ></button>
+                        <button class="btn-change-map" id="btnChangeMap" aria-label="切换地图">换一个 ↗</button>
                     </div>
 
                     <!-- 核心开始按钮：大号高亮炫彩动效 -->
@@ -170,84 +143,109 @@
                             <span class="btn-run-icon">▶</span>
                             <span class="btn-run-text">出发！开始跑酷</span>
                         </div>
-                        <div class="btn-run-sub">顺着引桥冲上车顶，开启屋顶冲刺！</div>
+                        <div class="btn-run-sub" id="lobbyStartHint">顺着引桥冲上车顶，穿过砂岩集市！</div>
                     </button>
+                    <nav class="lobby-bottom-dock" id="lobbyBottomDock" aria-label="主页功能">
+                        <button class="dock-btn" id="btnOpenMaps" title="地图漫游" aria-label="选择地图">
+                            <span class="dock-icon" aria-hidden="true"><svg viewBox="0 0 32 32" fill="none"><path d="m4 7 8-3 8 3 8-3v21l-8 3-8-3-8 3Z" fill="#a8c1a7"/><path d="M12 4v21m8-18v21" stroke="#5b846e" stroke-width="1.3"/><path d="m7 20 7-7 4 3 6-7" stroke="#fff5da" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span class="dock-title">地图</span>
+                        </button>
+                        <button class="dock-btn" id="btnOpenWardrobe" title="奶蛙衣橱" aria-label="打开奶蛙衣橱">
+                            <span class="dock-icon" aria-hidden="true"><svg viewBox="0 0 32 32" fill="none"><path d="m11 6-7 5 4 6 4-2v12h12V15l4 2 4-6-7-5c-3 4-6 4-9 0Z" transform="translate(-2)" fill="#e0b3a1"/><path d="M11 6c3 4 6 4 9 0M10 17h12" stroke="#8d655b" stroke-width="1.3" stroke-linecap="round"/></svg></span><span class="dock-title">衣橱</span>
+                        </button>
+                        <button class="dock-btn" id="btnOpenAchievements" title="我的成就" aria-label="查看成就记录">
+                            <span class="dock-icon" aria-hidden="true"><svg viewBox="0 0 32 32" fill="none"><path d="m10 18-2 11 8-4 8 4-2-11" fill="#9bb6a3"/><circle cx="16" cy="12" r="9" fill="#edcb82"/><circle cx="16" cy="12" r="6" stroke="#ac884c" stroke-width="1.2"/><path d="m16 7 1.4 3 3.3.5-2.4 2.3.6 3.3-2.9-1.6-2.9 1.6.6-3.3-2.4-2.3 3.3-.5Z" fill="#fff4d8"/></svg></span><span class="dock-title">成就</span>
+                        </button>
+                        <button class="dock-btn" id="btnOpenRank" title="我的成绩榜" aria-label="打开我的成绩榜">
+                            <span class="dock-icon" aria-hidden="true"><svg viewBox="0 0 32 32" fill="none"><path d="M10 5h12v8c0 4-2 7-6 7s-6-3-6-7Z" fill="#d4b372"/><path d="M10 8H6v4c0 3 2 5 5 5M22 8h4v4c0 3-2 5-5 5M16 20v5M11 26h10" stroke="#aa884f" stroke-width="1.3" stroke-linecap="round"/><path d="m13 12 2 2 4-4" stroke="#fff4d9" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span class="dock-title">排行</span>
+                        </button>
+                        <button class="dock-btn" id="btnOpenDaily" title="每日补给" aria-label="领取每日补给">
+                            <span class="dock-icon" aria-hidden="true"><svg viewBox="0 0 32 32" fill="none"><rect x="5" y="13" width="22" height="15" rx="3" fill="#d9a68e"/><rect x="3" y="10" width="26" height="6" rx="2" fill="#e9bea6"/><path d="M16 10v18M16 9C5 9 7 0 12 4l4 5Zm0 0c11 0 9-9 4-5l-4 5Z" stroke="#fff0d3" stroke-width="2"/></svg></span><span class="dock-title">补给</span><span class="dock-dot"></span>
+                        </button>
+                    </nav>
                 </footer>
             </div>
 
             <!-- ================= 弹窗系统 (地图选择、衣橱、排行、每日奖励) ================= -->
             <!-- 1. 地图选择弹窗 (支持未来扩展) -->
-            <div class="modal-overlay" id="mapModal" style="display: none;">
-                <div class="modal-card modal-wide">
+            <div class="modal-overlay" id="mapModal" style="display: none;" role="dialog" aria-modal="true" aria-labelledby="mapModalTitle">
+                <div class="modal-card modal-wide map-selection-card">
                     <div class="modal-header">
-                        <h2 class="modal-title">🗺️ 选择冒险地图</h2>
-                        <button class="btn-close-modal" id="btnCloseMapModal">✕</button>
+                        <h2 class="modal-title" id="mapModalTitle">选一个世界，出发</h2>
+                        <button class="btn-close-modal" id="btnCloseMapModal" aria-label="关闭地图选择">✕</button>
                     </div>
-                    <p class="modal-desc">探索不同风格的跑酷世界！主页面与跑酷环境将随地图实时变换：</p>
+                    <p class="modal-desc">五个小世界，各有风景与惊喜机关。</p>
                     <div class="map-list" id="mapListContainer">
                         <!-- 动态渲染地图卡片 -->
                     </div>
                 </div>
             </div>
 
-            <!-- 2. 衣橱装扮弹窗 (预留未来玩法) -->
-            <div class="modal-overlay" id="wardrobeModal" style="display: none;">
-                <div class="modal-card">
-                    <div class="modal-header">
-                        <h2 class="modal-title">🎒 奶龙衣橱</h2>
-                        <button class="btn-close-modal" id="btnCloseWardrobeModal">✕</button>
-                    </div>
-                    <p class="modal-desc">为你的专属奶龙挑选炫酷服饰！</p>
-                    <div class="skin-grid">
-                        <div class="skin-card active">
-                            <div class="skin-emoji">🦖</div>
-                            <div class="skin-name">经典暖萌黄</div>
-                            <span class="skin-tag">已穿戴</span>
-                        </div>
-                        <div class="skin-card locked">
-                            <div class="skin-emoji">👑</div>
-                            <div class="skin-name">埃及法老王</div>
-                            <span class="skin-tag lock-tag">敬请期待</span>
-                        </div>
-                        <div class="skin-card locked">
-                            <div class="skin-emoji">✨</div>
-                            <div class="skin-name">纯金闪耀龙</div>
-                            <span class="skin-tag lock-tag">敬请期待</span>
+            <!-- 2. 实时 3D 试衣间，共用游戏画布 -->
+            <div class="modal-overlay wardrobe-overlay" id="wardrobeModal" style="display: none;" role="dialog" aria-modal="true" aria-labelledby="wardrobeTitle">
+                <header class="wardrobe-header">
+                    <div><span class="wardrobe-eyebrow">换个造型，继续出发</span><h2 id="wardrobeTitle">奶蛙衣橱</h2></div>
+                    <div class="wardrobe-header-tools"><div class="wardrobe-wallet" aria-label="衣橱金币余额"><span aria-hidden="true">✦</span><strong id="wardrobeCoins">0</strong></div><button class="btn-close-modal" id="btnCloseWardrobeModal" aria-label="关闭衣橱">✕</button></div>
+                </header>
+                <div class="wardrobe-preview" id="wardrobePreview" aria-label="奶蛙 3D 试穿预览，左右拖动可旋转" tabindex="0">
+                    <span class="wardrobe-preview-badge">3D 试穿</span>
+                    <div class="wardrobe-preview-footer">
+                        <strong id="wardrobePreviewName">原生奶蛙</strong>
+                        <div class="wardrobe-rotate-controls" aria-label="旋转试穿角色">
+                            <button id="btnWardrobeLeft" type="button" aria-label="向左旋转">↶</button>
+                            <span>左右滑动 · 360° 看看</span>
+                            <button id="btnWardrobeRight" type="button" aria-label="向右旋转">↷</button>
+                            <button id="btnWardrobeReset" type="button" aria-label="恢复正面">正面</button>
                         </div>
                     </div>
                 </div>
+                <section class="wardrobe-sheet" aria-label="选择服装与翅膀">
+                    <div class="wardrobe-tabs" role="tablist" aria-label="衣橱类别">
+                        <button id="btnWardrobeClothes" role="tab" aria-selected="true" aria-controls="outfitSkinList" class="active">衣服</button>
+                        <button id="btnWardrobeWings" role="tab" aria-selected="false" aria-controls="wingSkinList">翅膀</button>
+                    </div>
+                    <div class="outfit-browser" id="outfitBrowser">
+                        <div class="outfit-filters" id="outfitFilters" role="group" aria-label="服装分类">
+                            <button type="button" data-outfit-filter="all" class="active" aria-pressed="true">全部</button>
+                            <button type="button" data-outfit-filter="daily" aria-pressed="false">日常</button>
+                            <button type="button" data-outfit-filter="weird" aria-pressed="false">怪趣</button>
+                        </div>
+                        <span class="outfit-count" id="outfitCount">4 套造型</span>
+                        <div class="outfit-browse-arrows"><button type="button" id="btnOutfitPrev" aria-label="浏览前面的服装">‹</button><button type="button" id="btnOutfitNext" aria-label="浏览后面的服装">›</button></div>
+                    </div>
+                    <div class="skin-grid wardrobe-skin-list" id="outfitSkinList" role="tabpanel" aria-labelledby="btnWardrobeClothes"></div>
+                    <div class="skin-grid wardrobe-skin-list" id="wingSkinList" role="tabpanel" aria-labelledby="btnWardrobeWings" hidden></div>
+                    <p class="wardrobe-section-note" id="wardrobeSectionNote">点选试穿，喜欢就穿上。</p>
+                    <p class="wardrobe-purchase-message" id="wardrobePurchaseMessage" role="status" aria-live="polite" hidden></p>
+                    <button class="wardrobe-equip" id="btnEquipWardrobe" type="button"><span>穿上这套</span><i aria-hidden="true">✓</i></button>
+                </section>
+            </div>
+
+            <div class="modal-overlay" id="achievementsModal" style="display: none;" role="dialog" aria-modal="true" aria-labelledby="achievementsTitle">
+                <section class="modal-card achievements-card">
+                    <div class="achievements-inner">
+                        <div class="modal-header"><div><span class="wardrobe-eyebrow">每次出发，都算数</span><h2 class="modal-title" id="achievementsTitle">我的成就</h2></div><button class="btn-close-modal" id="btnCloseAchievementsModal" aria-label="关闭成就">✕</button></div>
+                        <p class="achievements-intro">奶蛙的跑酷足迹</p>
+                        <div class="achievement-records">
+                            <div class="achievement-record achievement-distance"><span class="achievement-symbol" aria-hidden="true">↗</span><span class="achievement-label">最远距离</span><strong id="achBestDistance">0</strong><span class="achievement-unit">米</span></div>
+                            <div class="achievement-record achievement-coins"><span class="achievement-symbol" aria-hidden="true">✦</span><span class="achievement-label">累计金币</span><strong id="achLifetimeCoins">0</strong><span class="achievement-unit">枚</span></div>
+                            <div class="achievement-record"><span class="achievement-symbol" aria-hidden="true">↑</span><span class="achievement-label">完成跳跃</span><strong id="achJumps">0</strong><span class="achievement-unit">次</span></div>
+                            <div class="achievement-record"><span class="achievement-symbol" aria-hidden="true">↓</span><span class="achievement-label">完成滑铲</span><strong id="achSlides">0</strong><span class="achievement-unit">次</span></div>
+                        </div>
+                        <p class="achievements-note">每一跳、每一次滑铲，都会在这里留下记录。</p>
+                    </div>
+                </section>
             </div>
 
             <!-- 3. 排行榜弹窗 -->
-            <div class="modal-overlay" id="rankModal" style="display: none;">
-                <div class="modal-card">
-                    <div class="modal-header">
-                        <h2 class="modal-title">🏆 砂岩集市里程榜</h2>
-                        <button class="btn-close-modal" id="btnCloseRankModal">✕</button>
+            <div class="modal-overlay" id="rankModal" style="display: none;" role="dialog" aria-modal="true" aria-labelledby="rankTitle">
+                <section class="modal-card personal-rank-card">
+                    <div class="personal-rank-inner">
+                        <div class="modal-header"><div><span class="wardrobe-eyebrow">和上一次的自己比一比</span><h2 class="modal-title" id="rankTitle">我的成绩榜</h2></div><button class="btn-close-modal" id="btnCloseRankModal" aria-label="关闭成绩榜">✕</button></div>
+                        <div class="personal-rank-summary" id="rankSummary"></div>
+                        <p class="personal-rank-caption">按距离排名 · 最多展示前 20 局</p>
+                        <ol class="personal-rank-list" id="rankList" aria-label="我的每局成绩，按距离从高到低排序"></ol>
                     </div>
-                    <div class="rank-list">
-                        <div class="rank-item rank-top1">
-                            <span class="rank-idx">🥇 1</span>
-                            <span class="rank-name">神庙老司机奶龙</span>
-                            <span class="rank-score">102,400 米</span>
-                        </div>
-                        <div class="rank-item rank-top2">
-                            <span class="rank-idx">🥈 2</span>
-                            <span class="rank-name">许嵩的铁杆跑客</span>
-                            <span class="rank-score">68,920 米</span>
-                        </div>
-                        <div class="rank-item rank-top3">
-                            <span class="rank-idx">🥉 3</span>
-                            <span class="rank-name">车顶冲刺王</span>
-                            <span class="rank-score">45,110 米</span>
-                        </div>
-                        <div class="rank-item my-rank">
-                            <span class="rank-idx">📍 我</span>
-                            <span class="rank-name">奶龙大队长</span>
-                            <span class="rank-score" id="rankMyScore">0 米</span>
-                        </div>
-                    </div>
-                </div>
+                </section>
             </div>
 
             <!-- 4. 每日好运补给弹窗 -->
@@ -258,12 +256,12 @@
                         <button class="btn-close-modal" id="btnCloseDailyModal">✕</button>
                     </div>
                     <div class="modal-logo" style="margin: 10px 0;">🎉⭐</div>
-                    <p class="modal-desc">恭喜获得今日砂岩集市探险物资！</p>
+                    <p class="modal-desc" id="dailyDescription">每日领一份补给，攒金币解锁新造型。</p>
                     <div class="reward-box">
                         <span class="reward-icon">⭐</span>
                         <span class="reward-num">+100 金币</span>
                     </div>
-                    <button class="modal-btn-start" id="btnClaimDaily">开心收下！</button>
+                    <button class="modal-btn-start" id="btnClaimDaily">领取 100 金币</button>
                 </div>
             </div>
 
@@ -333,36 +331,6 @@
     </div>
 
     <!-- 游戏启动脚本 -->
-    <script type="module">
-        import { GameEngine } from './game/main.js';
-        import { platform } from './game/adapter.js';
-
-        // 启动 3D 游戏引擎
-        const engine = new GameEngine();
-        engine.init();
-
-        const urlParams = new URLSearchParams(window.location.search);
-        if (urlParams.get('autostart')) {
-            engine.start();
-        }
-
-        // 绑定底部虚拟按键手势
-        const bindBtn = (id, gesture) => {
-            const btn = document.getElementById(id);
-            if (!btn) return;
-            const trigger = (e) => {
-                e.preventDefault();
-                e.stopPropagation();
-                platform.notifyGesture(gesture);
-            };
-            btn.addEventListener('touchstart', trigger, { passive: false });
-            btn.addEventListener('mousedown', trigger);
-        };
-
-        bindBtn('btnLeft', 'swipe_left');
-        bindBtn('btnRight', 'swipe_right');
-        bindBtn('btnJump', 'swipe_up');
-        bindBtn('btnSlide', 'swipe_down');
-    </script>
+    <script defer data-naiwa-bundle data-build="c0c06a91d943" src="./game/browser.bundle.js?v=c0c06a91d943"></script>
 </body>
 </html>
